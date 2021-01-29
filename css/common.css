@@ -1,0 +1,47 @@
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    background-color: #fadca8;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* 左右摇晃动画 */
+  @keyframes shake {
+
+    10%,
+    20% {
+      -webkit-transform: rotate(-5deg);
+    }
+
+    30%,
+    50%,
+    70%,
+    90% {
+      -webkit-transform: rotate(5deg);
+    }
+
+    40%,
+    60%,
+    80% {
+      -webkit-transform: rotate(-5deg);
+    }
+
+    100% {
+      -webkit-transform: rotate(0);
+    }
+  }

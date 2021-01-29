@@ -1,0 +1,576 @@
+﻿@using Baby.AudioData.Entity;
+@using Newtonsoft.Json.Linq;
+@using Leo.ActivityData.Entity;
+@using Leo.AccountCenter.Process.Entity;
+
+@model Dictionary<string, object>
+@{
+    Layout = null;
+
+    //通用的错误提示信息     
+    var errorMsg = !Model.ContainsKey("ErrorMsg") ? "" : Model["ErrorMsg"].ToString();
+    var errorCode = !Model.ContainsKey("ErrorCode") ? "" : Model["ErrorCode"].ToString();
+
+    //接口域名前缀
+    var hostName = !Model.ContainsKey("ResHostName") ? "" : Model["ResHostName"].ToString();
+
+    //资源域名前缀,正式线上使用CDN域名，否则使用接口域名
+    var resHostName = hostName.Replace("https://act.babybus.com", "https://actcdn.babybus.com");
+
+    //活动数据
+    var activityInfo = !Model.ContainsKey("ActivityInfo") ? new VipGiftActivity() : (VipGiftActivity)Model["ActivityInfo"];
+
+    //活动状态   1未开始 2进行中 3活动已结束但可以兑换 4活动已结束也不能兑换
+    var activityState = 1;
+    if (activityInfo.ActivityID > 0 && activityInfo.VipBeginTime >= DateTime.Now)
+        activityState = 1;
+    else if (activityInfo.ActivityID > 0 && DateTime.Now >= activityInfo.VipBeginTime && activityInfo.VipEndTime >= DateTime.Now)
+        activityState = 2;
+    else if (activityInfo.ActivityID > 0 && DateTime.Now >= activityInfo.VipBeginTime && DateTime.Now > activityInfo.VipEndTime && activityInfo.GiftEndTime > DateTime.Now)
+        activityState = 3;
+    else activityState = 4;
+
+    var currGiftNum = activityInfo.GiftAllNum - activityInfo.GiftCurrNum;
+    var accountID = !Model.ContainsKey("AccountID") ? 0 : Model["AccountID"].ToInt();   
+
+    //订单列表   
+    var orderList = !Model.ContainsKey("OrderList") ? new List<AccountOrderResult>() : (List<AccountOrderResult>)Model["OrderList"];
+    var jsOrderList = new List<object>();
+    foreach (var order in orderList)
+    {
+        jsOrderList.Add(new
+        {
+            productName = order.ProductName,  //产品名称
+            orderName = order.OrderName,    //订单名称
+            price = order.Price,        //价格
+            startDateName = order.StartDateName,  //会员生效时间
+            endDateName = order.EndDateName,    //会员到期时间
+            payDateShow = order.PayDate.ToString("yyyy-MM-dd HH:mm:ss"),        //购买时间
+            payDate = order.PayDate.ToStampSecondLong(),
+            channelTypeName = order.ChannelTypeName,  //支付方式
+            orderNo = order.OrderNo,  //订单编号
+            address = order.Description.Trim(),  //地址
+        });
+    }
+
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>订单记录</title>
+    <script src="@resHostName/lib/jquery/dist/jquery.min.js"></script>
+    <script src="@resHostName/vipgift/js/tools.js"></script>
+    <!-- <script src="@resHostName/vipgift/js/vconsole.min.js"></script> -->
+    <script>
+
+        var errorCode = '@Html.Raw(errorCode)';     //错误号
+        var errorMsg = '@Html.Raw(errorMsg)';      //错误提示信息
+        var activityState =@activityState;       //活动状态  1未开始 2进行中 3活动已结束但可以兑换 4活动已结束也不能兑换
+        var giftNum =@currGiftNum;              //当前公仔数量
+        var accountID =@accountID;              //当前登录的帐号ID
+        var orderList =@Html.Raw(jsOrderList.Json());   //用户会员订单列表
+        var beginTime = @activityInfo.VipBeginTime.ToStampSecondLong();  //购买会员开始时间
+        var endTime = @activityInfo.VipEndTime.ToStampSecondLong();    //购买会员截止时间
+        var giftEndTime = @activityInfo.GiftEndTime.ToStampSecondLong();    //兑换截止时间
+        var currNow = @DateTime.Now.ToStampSecondLong();    //系统当前时间 毫秒
+
+        initTools.setRootFontSize();
+        //var vConsole = new VConsole();
+        window.onpageshow = function (event) {
+            console.log('pageOnShow')
+            console.log(localStorage.getItem("refresh"));
+            if (localStorage.getItem("refresh")) {
+                localStorage.removeItem("refresh");
+                handleRefresh();
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="@resHostName/vipgift/css/common.css" />
+    <style>
+        html {
+            background-color: #fff;
+        }
+
+        .container > img {
+            width: 100%;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .order-item {
+            width: 6.7rem;
+            margin-top: 0.4rem;
+        }
+
+        .order-item-top {
+            position: relative;
+            width: 100%;
+            height: 1.1rem;
+            border-radius: 0.2rem;
+            background-color: #FFF9C4;
+            border: 0.01rem solid #DDDDDD;
+            font-size: 0.32rem;
+            font-weight: 500;
+            color: #333333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 0 0.5rem 0 0.4rem;
+        }
+
+        .order-item-contnet::before {
+            content: '';
+            position: absolute;
+            width: 0.3rem;
+            height: 0.3rem;
+            background: #fff;
+            left: -0.15rem;
+            top: -0.15rem;
+            border-radius: 50%;
+            border-bottom: 1px solid #ddd;
+            transform: rotate(-76deg);
+        }
+
+        .order-item-contnet::after {
+            content: '';
+            position: absolute;
+            width: 0.3rem;
+            height: 0.3rem;
+            background: #fff;
+            top: -0.15rem;
+            right: -0.15rem;
+            border-radius: 50%;
+            border-bottom: 1px solid #ddd;
+            transform: rotate(76deg);
+        }
+
+        .order-item-contnet {
+            position: relative;
+            width: 100%;
+            background: #fff;
+            border-radius: 0.2rem;
+            border: 1px solid #DDDDDD;
+            font-size: 0.28rem;
+            font-weight: 500;
+            box-sizing: border-box;
+            padding: 0.3rem 0 0 0.39rem;
+        }
+
+        .item-row {
+            margin-bottom: 0.29rem;
+        }
+
+        .item-row-title {
+            color: #333333;
+        }
+
+        .item-row-result {
+            color: #666666;
+        }
+
+        .item-tip-text {
+            color: #B4B4B4;
+            font-size: 0.24rem;
+        }
+
+        .order-item-btn {
+            width: 6.697rem;
+            height: 0.873rem;
+            border-radius: 0.44rem;
+            background: linear-gradient(269deg, #F7BA00 0%, #FCB802 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.32rem;
+            color: #FEFEFF;
+            font-weight: 500;
+            margin-top: 0.19rem;
+        }
+
+        .tip-wrap {
+            width: 6.99rem;
+            font-size: 0.28rem;
+            color: #909090;
+            border-top: 1px dashed #3B0B03;
+            padding: 0.31rem 0.31rem 2rem 0.21rem;
+            box-sizing: border-box;
+            margin-top: 0.6rem;
+        }
+
+        .empty {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background-color: #fff;
+        }
+
+        .empty-item {
+            margin-top: 1.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .empty-img {
+            width: 2.87rem;
+            height: 2.55rem;
+        }
+
+        .empty-title {
+            color: #999999;
+            font-size: 0.3rem;
+            font-weight: 400;
+            margin-top: 0.3rem;
+        }
+
+        .divider {
+            width: 100%;
+            margin-top: 0.4rem;
+            border-top: 1px dashed #3B0B03;
+        }
+
+        .shadow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background: rgba(0, 0, 0, .66);
+            display: none;
+        }
+
+        .pop-wrap {
+                width: 6.57rem;
+    height: 6.99rem;
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            top: 2.6rem;
+        }
+
+        .pop {
+    width: 6.57rem;
+    height: 6.99rem;
+        }
+
+        .pop-btn {
+    width: 6.57rem;
+    height: 1rem;
+            position: absolute;
+    bottom: 0rem;
+    left: 0rem;
+        }
+
+        .refresh-btn-wrap {
+            position: fixed;
+            bottom: 4rem;
+            right: 0.42rem;
+        }
+
+        .refresh-btn {
+            width: 1.49rem;
+            height: 1.30rem;
+        }
+
+        .refresh-text-wrap {
+            width: 1.49rem;
+            text-align: center;
+            font-size: 0.24rem;
+            color: skyblue;
+            position: fixed;
+            bottom: 3.7rem;
+            right: 0.42rem;
+        }
+
+        @@media (min-width: 700px) {
+            .pop-wrap {
+      width: 657px;
+      height: 699px;
+                top: 50%;
+                left: 50%;
+      margin-left: -328px;
+      margin-top: -350px;
+            }
+
+            .pop {
+      width: 657px;
+      height: 699px;
+            }
+
+            .pop-btn {
+      width: 657px;
+      height: 100px;
+                position: absolute;
+      bottom: 0px;
+      left: 0px;
+            }
+
+            .refresh-btn-wrap {
+                position: fixed;
+                bottom: 400px;
+                right: 42px;
+            }
+
+            .refresh-text-wrap {
+                width: 149px;
+                text-align: center;
+                font-size: 24px;
+                color: skyblue;
+                position: fixed;
+                bottom: 370px;
+                right: 42px;
+            }
+
+            .refresh-btn {
+                width: 149px;
+                height: 130px;
+            }
+
+            .empty-item {
+                margin-top: 185px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .empty-img {
+                width: 287px;
+                height: 255px;
+            }
+
+            .empty-title {
+                color: #999999;
+                font-size: 30px;
+                font-weight: 400;
+                margin-top: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 埋点 -->
+    @* <div style="position: absolute;width:0;height:0;overflow:hidden;">
+            <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279350092&web_id=1279350092"></script>
+        </div> *@
+    <div style="position: absolute;width:0;height:0;overflow:hidden;">
+        <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
+    </div>
+    <div id="container" class="container">
+
+    </div>
+    <div id="empty" class="empty hidden">
+        <div class="empty-item">
+            <img class="empty-img" src="@resHostName/vipgift/img/no-order.png" />
+            <span class="empty-title">目前还没有订单哦~</span>
+        </div>
+    </div>
+
+    <script>
+        var _czc = _czc || [];
+        _czc.push(["_setAccount", "1279349239"]);
+        var containerElement = document.getElementById("container");
+        var emptyElement = document.getElementById("empty");
+        renderRefreshBtn();
+        if (orderList.length > 0) {
+            $('#empty').addClass("hidden");
+            renderList();
+        } else {
+            $('#container').addClass("hidden");
+            $('#empty').removeClass("hidden");
+        }
+
+        var aid = getQueryString('aid');
+
+        //获取页面传参
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]);
+            return null;
+        }
+
+        function stopBubble(e) {
+            try {
+                window.event ? window.event.cancelBubble = true : e.stopPropagation();
+            } catch (error) { }
+        }
+
+        function handle(event) {
+            event.preventDefault();
+        }
+
+        function renderList() {
+            for (var i = 0; i < orderList.length; i += 1) {
+                var orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                var orderItemTop = '<div class="order-item-top"><span>' + orderList[i].productName + ' — ' + orderList[i].orderName + '</span><span>¥' + orderList[i].price + '</span></div>';
+                var orderItemContent = document.createElement('div');
+                orderItemContent.className = 'order-item-contnet'
+                for (var key in orderList[i]) {
+                    switch (key) {
+                        case 'startDateName':
+                            orderItemContent.innerHTML +=
+                                '<div class="item-row"><span class="item-row-title">会员生效时间：</span><span class="item-row-result">' +
+                                orderList[i][key] + '</span></div>'
+                            break;
+                        case 'endDateName':
+                            orderItemContent.innerHTML +=
+                                '<div class="item-row"><span class="item-row-title">会员到期时间：</span><span class="item-row-result">' +
+                                orderList[i][key] + '</span></div>'
+                            break;
+                        case 'payDateShow':
+                            orderItemContent.innerHTML +=
+                                '<div class="item-row"><span class="item-row-title">购买时间：</span><span class="item-row-result">' +
+                                orderList[i][key] + '</span></div>'
+                            break;
+                        case 'channelTypeName':
+                            orderItemContent.innerHTML +=
+                                '<div class="item-row"><span class="item-row-title">购买方式：</span><span class="item-row-result">' +
+                                orderList[i][key] + '</span></div>'
+                            break;
+                        case 'orderNo':
+                            orderItemContent.innerHTML +=
+                                '<div class="item-row"><span class="item-row-title">订单编号：</span><span class="item-row-result">' +
+                                orderList[i][key] + '</span></div>'
+                            break;
+                        case 'address':
+                            if (orderList[i][key]) {
+                                orderItemContent.innerHTML +=
+                                    '<div class="item-row"><span class="item-row-title">收件信息：</span><span class="item-row-result">' +
+                                    orderList[i][key] + '</span></div>'
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (orderList[i].payDate > endTime || currNow > giftEndTime) {
+                    if (orderList[i].address.length === 0) {
+                    orderItemContent.innerHTML +=
+                        '<div class="item-row"><span class="item-tip-text">活动已结束</span></div>'
+                    }
+                } else if (giftNum <= 0 && orderList[i].address.length === 0) {
+                    orderItemContent.innerHTML +=
+                        '<div class="item-row"><span class="item-tip-text">手办已被领完了，下次早点来哦~</span></div>'
+                }
+                var orderItemBtn = '<div class="order-item-btn" onClick="orderBtnClick(this)" id="orderBtn" data-index=' + i + '>填写收件信息</div>';
+                orderItem.innerHTML += orderItemTop;
+                orderItem.appendChild(orderItemContent);
+                var divider = '<div class="divider"></div>';
+                if (giftNum > 0 && orderList[i].address.length === 0 && orderList[i].payDate <= endTime && currNow <= giftEndTime) {
+                    orderItem.innerHTML += orderItemBtn;
+                    if (i < orderList.length - 1) {
+                        orderItem.innerHTML += divider;
+                    }
+                }
+                containerElement.appendChild(orderItem);
+            }
+            var tipWrap =
+                '<div class="tip-wrap">温馨提示：</br>1、宝宝巴士将在收到您收件信息后的7个工作日内为您发出手办;</br></br>2、如收件信息有变更或其他疑问，可联系QQ客服。VIP会员客服热线1：18059175351；热线2：18050313972</div>'
+            containerElement.innerHTML += tipWrap;
+        }
+
+        function renderRefreshBtn() {
+            var refreshBtnWrap = document.createElement('div');
+            var refreshTipText = document.createElement('div');
+      refreshTipText.className = "refresh-text-wrap";
+      refreshTipText.innerText = '刷新订单';
+            refreshBtnWrap.className = 'refresh-btn-wrap';
+            refreshBtnWrap.onclick = initTools.debounce(handleRefresh, 300, true);
+            refreshBtnWrap.innerHTML += '<img src="@resHostName/vipgift/img/refresh-btn.png" class="refresh-btn" />';
+            document.body.appendChild(refreshBtnWrap);
+            document.body.appendChild(refreshTipText);
+        }
+
+        function handleRefresh() {
+            //var url = '@hostName/VipGift/VipOrder?aid=' + aid;
+                getData();
+            /*if (navigator.userAgent.toLowerCase().indexOf('android') >= 0) {
+                //window.location.replace('?Client=Target&Type=Inner&Url=' + encodeURIComponent(url) + '&Title=订单列表&IsHeader=1');
+            } else {
+                window.location.href = "?Client=LoginRefresh";
+            }*/
+            //location = '?Client=Target&Type=Inner&Url=' + encodeURIComponent(url) + '&Title=订单列表&IsHeader=1&IsNewWindow=1';
+        }
+
+        function getData() {
+                  $.ajax({
+        url: 'VipOrderData',
+        data: {
+          aid: aid,
+        },
+        method: 'POST',
+        dataType: 'json',
+        complete: function (res) {
+          console.log(res)
+        },
+        success: function (res) {
+          console.log("发送成功");
+          console.log(res);
+          if (res.resultCode === "0") {
+            console.log(res.data);
+        orderList = res.data.orderList; //用户会员订单列表
+            try {
+                activityState = res.data.activityData.activityState;       //活动状态  1未开始 2进行中 3活动已结束但可以兑换 4活动已结束也不能兑换
+                giftNum = res.data.activityData.giftNum;              //当前公仔数量
+                beginTime = res.data.activityData.beginTime;  //购买会员开始时间
+                endTime = res.data.activityData.endTime;    //购买会员截止时间
+                giftEndTime = res.data.activityData.giftEndTime;    //兑换截止时间
+                currNow = res.data.activityData.currNow;    //系统当前时间 毫秒
+            } catch (error) {
+                console.log(error)
+            }
+            $('#container').empty();
+            renderList();
+          } else {}
+        },
+        fail: function (err) {
+          console.log("发送失败")
+        }
+      })
+        }
+
+        function orderBtnClick(e) {
+            try {
+                _czc.push(["_trackEvent", "填写收件信息领公仔", "点击"])
+            } catch (error) {
+                console.log(error)
+            }
+            var index = Number(e.getAttribute('data-index'));
+            if (orderList[index].orderNo) {
+                var url = '@hostName/VipGift/ExpressInfo?aid=' + aid + '&OrderNo=' + orderList[index].orderNo;
+                window.location.href = '?Client=Target&Type=Inner&Url=' + encodeURIComponent(url) + '&Title=收件信息&IsHeader=1&IsNewWindow=1';
+                //window.location.href = './ExpressInfo?aid=' + aid + '&OrderNo=' + orderList[index].OrderNo;
+            }
+        }
+
+    </script>
+</body>
+
+
+
+
+</html>

@@ -83,7 +83,7 @@
         .container {
             position: relative;
             width: 100vw;
-            padding-bottom: 1.48rem;
+            padding-bottom: 1.46rem;
         }
 
         .container > img {
@@ -99,7 +99,7 @@
 
         .bottom-btn {
             position: fixed;
-            height: 1.48rem;
+            height: 1.46rem;
             width: 100vw;
             bottom: 0;
             left: 0;
@@ -123,37 +123,22 @@
             line-height: 0.45rem;
         }
 
-        .btn-list {
-    position: absolute;
-    top: .73rem;
-    right: .38rem
-  }
+.order-btn {
+	position: absolute;
+	right: .3rem;
+	top: .45rem;
+	border-radius: 50%;
+	width: 1rem;
+	height: .8rem;
+}
 
-  .btn-list>div {
-    display: block;
-    width: .8rem;
-    height: .8rem;
-    border-radius: 50%;
-    background: #ff7800;
-    box-shadow: 0 .04rem .14rem .01rem #ff8a43;
-    color: #ffeeb2;
-    font-size: .278rem;
-    text-align: center;
-    line-height: .8rem;
-    margin-bottom: .6rem;
-    font-weight: 400;
-  }
-
-  .order-btn {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding:  0.17rem 0.1rem;
-    box-sizing: border-box;
-    font-size: 0.24rem !important;
-    line-height: 1 !important;
-  }
+.rule-btn {
+	position: absolute;
+	right: .35rem;
+	top: 1.7rem;
+	border-radius: 50%;
+	width: .9rem;
+	height: .7rem;
 
   .rules-container {
     width: 7.5rem;
@@ -228,18 +213,15 @@
     </div>
     <div class="container">
         <!-- 规则及订单按钮 -->
-        <div class="btn-list">
-        <div id="orderBtn" class="order-btn">订单记录</div>
-        <div onClick="openRules()">规则</div>
-        </div>
-        <img id="activeBg" onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index_bg1.jpg" />
-        <img id="grayBg" onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index_bg1_gray.jpg" />
-        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index_bg2.jpg" />
-        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index_bg3-1.png" />
-        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index_bg4.jpg" />
-        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index_bg5.jpg" />
-        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index_bg6.jpg" />
-        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index_bg7.jpg" />
+        <div id="orderBtn" class="order-btn"></div>
+        <div onClick="openRules()" class="rule-btn"></div>
+        <img id="activeBg" onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index-spring-bg1.png" />
+        <img id="grayBg" onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index-spring-bg1-gray.png" />
+        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index-spring-bg2.png" />
+        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index-spring-bg3.png" />
+        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index-spring-bg4.png" />
+        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index-spring-bg5.png" />
+        <img onClick="preventClick" class="index-bg" src="@resHostName/vipgift/img/index-spring-bg6.png" />
     </div>
       <!-- 规则弹窗 -->
     <div id="rules-container" class="rules-container" style="display: none;">
@@ -250,33 +232,37 @@
             <p class="rules-title">活动规则</p>
             <div id="rules-item-wrap" class="rules-item-wrap">
                 <p class="rules-item">
-                1、宝宝巴士的用户在活动期间购买【儿歌超级VIP】的一年会员，可免费获赠AR互动有声书一份，限量50份，先到先得；
+                1、活动时间：2021.2.4-2021.2.6；
+                </p>
+                <p class="rules-item">
+                2、宝宝巴士的用户在活动期间购买【儿歌畅享VIP】的一年会员，可免费获赠春节版JOJO公仔1个，限量150份，先到先得；
                 </p>
                 <p class="rules-item" style="color: orange">
-                2、AR互动有声书领取说明：已成功购买活动套餐的用户，请及时在【订单记录】页点击【填写收件信息】按钮，填写并成功提交收货地址即可完成申领。
+                3、公仔领取说明：已成功购买活动套餐的用户，请及时在【订单记录】页点击【填写收件信息领公仔】按钮，填写并成功提交收货地址即可完成申领。
                 </p>
                 <p class="rules-item">
-                3、由于活动参与人数较多，赠送的AR互动有声书会在您提交收件信息后的7个工作日内发出，请您耐心等待；
+                4、 由于活动参与人数较多，赠送的公仔会在您提交收件信息后的7个工作日内发出，请您耐心等待；春节期间照常发货，收件地区的快件派送以当地策略为准；
                 </p>
                 <p class="rules-item" style="color: orange">
-                4、付费购买该会员套餐的用户，暂不支持退款退货；
+                5、付费购买该会员套餐的用户，暂不支持退款退货；
                 </p>
                 <p class="rules-item">
-                5、关于会员使用须知，请参照【常见问题】和【会员服务协议】；
+                6、关于会员使用须知，请参照【常见问题】和【会员服务协议】；
                 </p>
                 <p class="rules-item">
-                6、如果有疑问的地方，可联系VIP会员客服热线1：18059175351；热线2：18050313972
+                7、如果有疑问的地方，可联系VIP会员客服热线1：18059175351；热线2：18050313972
                 </p>
                 <p class="rules-item">
-                7、关于该活动的一切解释权，归宝宝巴士所有。
+                8、关于该活动的一切解释权，归宝宝巴士所有。
                 </p>
             </div>
         </div>
     </div>
     <!-- 领取按钮 -->
-    <img class="bottom-btn" id="receiveBtn" src="@resHostName/vipgift/img/receive-new.png" />
+    <img class="bottom-btn" id="receiveBtn" src="@resHostName/vipgift/img/receive-btn.gif" />
     <img class="bottom-btn" id="endActiveBtn" src="@resHostName/vipgift/img/end-active-btn-new.png" />
-    <img class="bottom-btn" id="openBtn" src="@resHostName/vipgift/img/open-btn-new.png" />
+    <img class="bottom-btn" id="preHeatBtn" src="@resHostName/vipgift/img/./images/preheat.png" />
+    <img class="bottom-btn" id="openBtn" src="@resHostName/vipgift/img/open-btn.gif" />
 
     <script>
         var _czc = _czc || [];
@@ -352,6 +338,7 @@
                     $('#openBtn').addClass("hidden");
                     break;
                 case 2:
+                    $('#preHeatBtn').addClass("hidden");
                     if (giftNum > 0) {
                         $('#endActiveBtn').addClass("hidden");
                         $('#openBtn').addClass("hidden");
@@ -361,14 +348,17 @@
                     }
                     break;
                 case 3:
+                    $('#preHeatBtn').addClass("hidden");
                     $('#receiveBtn').addClass("hidden");
                     $('#openBtn').addClass("hidden");
                     break;
                 case 4:
+                    $('#preHeatBtn').addClass("hidden");
                     $('#receiveBtn').addClass("hidden");
                     $('#openBtn').addClass("hidden");
                     break;
                 default:
+                    $('#preHeatBtn').addClass("hidden");
                     break;
             }
         }

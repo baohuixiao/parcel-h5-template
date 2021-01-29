@@ -88,12 +88,11 @@
         }
 
         .bottom-btn {
-            position: fixed;
-                left: 50%;
-    bottom: 0.22rem;
-    width: 6.96rem;
-    height: 0.96rem;
-    margin-left: -3.48rem;
+            	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 7.5rem;
+	height: 1.46rem;
         }
 
         .input {
@@ -185,8 +184,8 @@
         }
 
         .pop-wrap {
-                width: 6.57rem;
-    height: 6.99rem;
+            	width: 6.33rem;
+	height: 7.02rem;
             position: absolute;
             left: 0;
             right: 0;
@@ -195,8 +194,8 @@
         }
 
         .pop {
-    width: 6.57rem;
-    height: 6.99rem;
+	width: 6.63rem;
+	height: 7.02rem;
         }
 
         .pop-btn {
@@ -208,17 +207,17 @@
         }
         @@media (min-width: 700px) {
             .pop-wrap {
-      width: 657px;
-      height: 699px;
+		width: 663px;
+		height: 702px;
                 top: 50%;
                 left: 50%;
-      margin-left: -328px;
-      margin-top: -350px;
+		margin-left: -331.5px;
+		margin-top: -351px;
             }
 
             .pop {
-      width: 657px;
-      height: 699px;
+		width: 663px;
+		height: 702px;
             }
 
             .pop-btn {
@@ -243,7 +242,7 @@
     </div>
     <div @@touchmove.prevent class="shadow" onClick="closeSuccessPop()">
     <div class="pop-wrap">
-              <img class="pop" src="@resHostName/vipgift/img/pop-bg-new.png" onClick="stopBubble()" />
+              <img class="pop" src="@resHostName/vipgift/img/pop-bg-spring.png" onClick="stopBubble()" />
       <div class="pop-btn" onClick="closeSuccessPop(this)"></div>
     </div>
     </div>
@@ -255,7 +254,7 @@
     <div class="container">
     <!-- <img class="address-bg" onClick="preventClick" src="@resHostName/vipgift/img/address-bg.png" /> -->
     <!-- <img class="address-bg" onClick="preventClick" src="@resHostName/vipgift/img/address-bg-fullyear.png" /> -->
-    <img class="address-bg" onClick="preventClick" src="@resHostName/vipgift/img/address-bg-new1.png" />
+    <img class="address-bg" onClick="preventClick" src="@resHostName/vipgift/img/address-spring-bg.png.png" />
     <div class="content-wrap">
       <div class="content-item">
         收货人：<input class="input" id="name" placeholder="请输入2-10个中文汉字" maxlength="10" />
@@ -266,14 +265,14 @@
           placeholder="请输入省、市、区及剩余详细地址(6-40字)"></textarea>
       </div>
       <div class="content-item">
-        手机号：<input class="input" id="phone" placeholder="重要！请填写11位正确手机号" tabindex="1" type='text' maxlength="11"
+        联系电话：<input class="input" id="phone" placeholder="重要！请填写11位正确手机号" tabindex="1" type='text' maxlength="11"
          autocomplete="off" />
       </div>
       <div class="tip-wrap">(宝宝巴士将在您提交收件信息后7个工作日内发出手办)</div>
     </div>
   </div>
 
-  <img class="bottom-btn" id="submit" src="@resHostName/vipgift/img/sendInfo.png" />
+  <img class="bottom-btn" id="submit" src="@resHostName/vipgift/img/address-spring-sendInfo.png" />
   <script>
     var _czc = _czc || [];
     _czc.push(["_setAccount", "1279349239"]);

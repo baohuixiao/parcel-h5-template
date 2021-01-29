@@ -344,8 +344,8 @@
             }
 
             .refresh-btn {
-                width: 149px;
-                height: 130px;
+                width: 142px;
+                height: 123px;
             }
 
             .empty-item {
@@ -500,7 +500,7 @@
       refreshTipText.innerText = '刷新订单';
             refreshBtnWrap.className = 'refresh-btn-wrap';
             refreshBtnWrap.onclick = initTools.debounce(handleRefresh, 300, true);
-            refreshBtnWrap.innerHTML += '<img src="@resHostName/vipgift/img/refresh-btn.png" class="refresh-btn" />';
+            refreshBtnWrap.innerHTML += '<img src="@resHostName/vipgift/img/refresh-btn-spring.png" class="refresh-btn" />';
             document.body.appendChild(refreshBtnWrap);
             document.body.appendChild(refreshTipText);
         }

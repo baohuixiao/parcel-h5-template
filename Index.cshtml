@@ -139,6 +139,7 @@
 	border-radius: 50%;
 	width: .9rem;
 	height: .7rem;
+}
 
   .rules-container {
     width: 7.5rem;
@@ -259,7 +260,6 @@
         </div>
     </div>
     <!-- 领取按钮 -->
-    <img class="bottom-btn" id="receiveBtn" src="@resHostName/vipgift/img/receive-btn.gif" />
     <img class="bottom-btn" id="endActiveBtn" src="@resHostName/vipgift/img/end-active-btn-new.png" />
     <img class="bottom-btn" id="preHeatBtn" src="@resHostName/vipgift/img/./images/preheat.png" />
     <img class="bottom-btn" id="openBtn" src="@resHostName/vipgift/img/open-btn.gif" />
@@ -279,9 +279,7 @@
             return null;
         }
 
-        var oBtn = document.getElementById("receiveBtn");
         var openBtn = document.getElementById("openBtn");
-        oBtn.onclick = initTools.debounce(onBtnClick, 500, true);
         openBtn.onclick = initTools.debounce(onBtnClick, 500, true);
         var orderBtn = document.getElementById("orderBtn");
         orderBtn.onclick = initTools.debounce(orderBtnClick, 500, true);
@@ -333,28 +331,20 @@
         function handleBtnShow() {
             switch (activityState) {
                 case 1:
-                    $('#receiveBtn').addClass("hidden");
+                    // $('#receiveBtn').addClass("hidden");
                     $('#endActiveBtn').addClass("hidden");
                     $('#openBtn').addClass("hidden");
                     break;
                 case 2:
                     $('#preHeatBtn').addClass("hidden");
-                    if (giftNum > 0) {
-                        $('#endActiveBtn').addClass("hidden");
-                        $('#openBtn').addClass("hidden");
-                    } else {
-                        $('#receiveBtn').addClass("hidden");
-                        $('#endActiveBtn').addClass("hidden");
-                    }
+                    $('#endActiveBtn').addClass("hidden");
                     break;
                 case 3:
                     $('#preHeatBtn').addClass("hidden");
-                    $('#receiveBtn').addClass("hidden");
                     $('#openBtn').addClass("hidden");
                     break;
                 case 4:
                     $('#preHeatBtn').addClass("hidden");
-                    $('#receiveBtn').addClass("hidden");
                     $('#openBtn').addClass("hidden");
                     break;
                 default:

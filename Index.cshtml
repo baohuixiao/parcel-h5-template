@@ -261,7 +261,7 @@
     </div>
     <!-- 领取按钮 -->
     <img class="bottom-btn" id="endActiveBtn" src="@resHostName/vipgift/img/end-active-btn-new.png" />
-    <img class="bottom-btn" id="preHeatBtn" src="@resHostName/vipgift/img/preheat.png" />
+    <img class="bottom-btn" id="preHeatBtn" onClick="clickPreHeat()" src="@resHostName/vipgift/img/preheat.png" />
     <img class="bottom-btn" id="openBtn" src="@resHostName/vipgift/img/open-btn.gif" />
 
     <script>
@@ -304,6 +304,8 @@
                 } else {
                     window.location.href = '?Client=Login';
                 }
+            } else if (activityState === 1) {
+                showToast('2月4日-2月6日开领！', 2000);
             }
         }
 
@@ -394,6 +396,32 @@
             return false;
         }
 
+
+    function clickPreHeat() {
+      showToast('2月4日-2月6日开领！', 2000)
+    }
+
+    var toastFlag = true;
+
+    // toast控件封装
+    function showToast(text, duration) {
+      if (!(text.trim()) || !toastFlag) {
+        return;
+      }
+      var timer = null;
+      toastFlag = false;
+
+      var toastWrap = document.createElement('div');
+      toastWrap.style.cssText =
+        'position: fixed; font-size: 0.32rem; color: #fff; z-index: 5; max-width: 5rem;text-align: center;top: 40%;padding: 0.1rem 0.3rem;border-radius: 0.5rem;background-color: rgba(0, 0, 0, 0.7);display:flex;left: 50%;transform: translateX(-50%);'
+      toastWrap.innerText = text;
+      document.body.appendChild(toastWrap);
+      timer = setTimeout(function () {
+        toastFlag = true;
+        clearTimeout(timer)
+        document.body.removeChild(toastWrap);
+      }, duration)
+    }
     </script>
 
   

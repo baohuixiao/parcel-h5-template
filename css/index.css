@@ -1,0 +1,143 @@
+ * {
+   margin: 0;
+   padding: 0;
+ }
+
+ a {
+   text-decoration: none;
+ }
+
+ img {
+   display: block;
+   max-width: 100%;
+ }
+
+ .hidden {
+   display: none !important;
+ }
+
+ .container {
+   position: relative;
+   width: 7.5rem;
+   padding-bottom: 1.7rem;
+   margin: 0 auto;
+   background-color: #ff734c;
+ }
+
+ .container>img {
+   width: 100%;
+   display: block;
+ }
+
+ .body {
+   position: fixed;
+   top: 0;
+   left: 50%;
+   transform: translateX(-50%);
+ }
+
+ .bottom-btn {
+   position: fixed;
+   height: 1.7rem;
+   width: 7.5rem;
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%)
+ }
+
+ .activity-rules {
+   width: 100vw;
+   padding: 0 0.33rem 0 0.30rem;
+   box-sizing: border-box;
+   position: absolute;
+   top: 11.3rem;
+   font-size: 0.24rem;
+   color: #fff;
+ }
+
+ .activity-rules-title {
+   font-size: 0.28rem;
+ }
+
+ .activity-rules-content {
+   line-height: 0.45rem;
+ }
+
+ .order-btn {
+   position: absolute;
+   right: 1.15rem;
+   top: .14rem;
+   width: 1.04rem;
+   height: 0.94rem;
+ }
+
+ .rule-btn {
+   position: absolute;
+   right: .16rem;
+   top: 0.37rem;
+   width: .92rem;
+   height: .83rem;
+ }
+
+ .rules-container {
+   width: 7.5rem;
+   height: 100vh;
+   position: fixed;
+   top: 0;
+   left: 50%;
+   transform: translateX(-50%);
+   z-index: 1;
+ }
+
+ .rules-container .rules-mask {
+   width: 100%;
+   height: 100%;
+   background: rgba(0, 0, 0, .5)
+ }
+
+ .rules-container .rules-list {
+   width: 100%;
+   height: 53vh;
+   position: absolute;
+   left: 0;
+   bottom: 0;
+   background: #fff;
+   border-radius: .4rem .4rem 0 0;
+   box-sizing: border-box;
+   padding: .5rem;
+   font-size: .28rem;
+   color: #434343
+ }
+
+ .rules-title {
+   font-size: .38rem;
+   line-height: .38rem;
+   text-align: center;
+   font-family: PingFang SC;
+   font-weight: 500;
+   color: #212121;
+   margin-bottom: .4rem
+ }
+
+ .rules-item {
+   line-height: 1.5;
+ }
+
+ .rules-item-wrap {
+   height: 82%;
+   overflow-y: scroll;
+   box-sizing: border-box;
+   -webkit-overflow-scrolling: touch;
+ }
+
+ .rules-item-wrap::-webkit-scrollbar {
+   display: none;
+ }
+
+ .close-btn {
+   width: .31rem;
+   height: .31rem;
+   position: absolute;
+   right: .42rem;
+   top: .33rem
+ }

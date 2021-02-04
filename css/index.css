@@ -3,10 +3,6 @@
    padding: 0;
  }
 
- a {
-   text-decoration: none;
- }
-
  img {
    display: block;
    max-width: 100%;
@@ -45,24 +41,6 @@
    transform: translateX(-50%)
  }
 
- .activity-rules {
-   width: 100vw;
-   padding: 0 0.33rem 0 0.30rem;
-   box-sizing: border-box;
-   position: absolute;
-   top: 11.3rem;
-   font-size: 0.24rem;
-   color: #fff;
- }
-
- .activity-rules-title {
-   font-size: 0.28rem;
- }
-
- .activity-rules-content {
-   line-height: 0.45rem;
- }
-
  .order-btn {
    position: absolute;
    right: 1.15rem;
@@ -70,6 +48,8 @@
    width: 1.04rem;
    height: 0.94rem;
  }
+
+ /* 规则弹窗 */
 
  .rule-btn {
    position: absolute;

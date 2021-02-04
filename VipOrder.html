@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>订单记录</title>
+    <script src="https://act.development.platform.babybus.com/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://act.development.platform.babybus.com/lib/tool/vconsole.min.js"></script>
+    <script>
+        // 服务端数据
+        var canUsedNum = 10; //当前公仔数量
+        var orderList = [{
+                "productName": "tcyO4hhevW",
+                "orderName": "wrHoRvQOE7",
+                "price": 54579,
+                "startDateName": "e0FusafG7q",
+                "endDateName": "kR3qqUMISx",
+                "payDateShow": "YOMLc3IkSr",
+                "payDate": 1612336509047,
+                "channelTypeName": "J070gMGi42",
+                "orderNo": "myYXkT84FX",
+                "address": ""
+            },
+            {
+                "productName": "ZD7NBdioT9",
+                "orderName": "Vu66bkDxIL",
+                "price": 55481,
+                "startDateName": "DUuKBi8kzH",
+                "endDateName": "usc3NF2FM7",
+                "payDateShow": "97W5Or3sPq",
+                "payDate": 1612334145670,
+                "channelTypeName": "v76gtq4fU5",
+                "orderNo": "Rq3GdyAK36",
+                "address": "53ilbqH7rL"
+            },
+        ]; //用户会员订单列表
+        var joinBeginTime = 1612157754; //购买会员开始时间
+        var joinEndTime = 1612336509048; //购买会员截止时间
+        var exChangeEndTime = 1612336509049; //兑换截止时间
+        var serverTime = 1612419866; //系统当前时间 毫秒
+
+        // 页面适配
+        (function () {
+            var html = document.documentElement;
+            var windowWidth = html.clientWidth > 600 ? 600 : html.clientWidth;
+            html.style.fontSize = windowWidth / 7.5 + 'px';
+        }());
+        var vConsole = new VConsole();
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="./css/vipOrder.css" />
+</head>
+
+<body>
+    <!-- 埋点 -->
+    <!-- <div style="position: absolute;width:0;height:0;overflow:hidden;">
+        <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
+    </div> -->
+    <div id="container" class="container">
+
+    </div>
+    <div id="empty" class="empty hidden">
+        <div class="empty-item">
+            <img class="empty-img"
+                src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210204/09c7ed1abe5343f3b00904ee6b17a019.png" />
+            <span class="empty-title">目前还没有订单哦~</span>
+        </div>
+    </div>
+
+    <script>
+        var _czc = _czc || [];
+        _czc.push(["_setAccount", "1279349239"]);
+        var orderList = [];
+        var aid = getQueryString('aid');
+        var containerElement = document.getElementById("container");
+        var emptyElement = document.getElementById("empty");
+        getData();
+        renderRefreshBtn();
+
+
+        //获取页面传参
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]);
+            return null;
+        }
+
+        function renderList() {
+            if (orderList.length > 0) {
+                for (var i = 0; i < orderList.length; i += 1) {
+                    var orderItem = document.createElement('div');
+                    orderItem.className = 'order-item';
+                    var orderItemTop = '<div class="order-item-top"><span>' + orderList[i].ProductName + ' — ' +
+                        orderList[
+                            i].OrderName + '</span><span>¥' + orderList[i].Price + '</span></div>';
+                    var orderItemContent = document.createElement('div');
+                    orderItemContent.className = 'order-item-contnet'
+                    for (var key in orderList[i]) {
+                        switch (key) {
+                            case 'StartDateName':
+                                orderItemContent.innerHTML +=
+                                    '<div class="item-row"><span class="item-row-title">会员生效时间：</span><span class="item-row-result">' +
+                                    orderList[i][key] + '</span></div>'
+                                break;
+                            case 'EndDateName':
+                                orderItemContent.innerHTML +=
+                                    '<div class="item-row"><span class="item-row-title">会员到期时间：</span><span class="item-row-result">' +
+                                    orderList[i][key] + '</span></div>'
+                                break;
+                            case 'PayDateShow':
+                                orderItemContent.innerHTML +=
+                                    '<div class="item-row"><span class="item-row-title">购买时间：</span><span class="item-row-result">' +
+                                    orderList[i][key] + '</span></div>'
+                                break;
+                            case 'ChannelTypeName':
+                                orderItemContent.innerHTML +=
+                                    '<div class="item-row"><span class="item-row-title">购买方式：</span><span class="item-row-result">' +
+                                    orderList[i][key] + '</span></div>'
+                                break;
+                            case 'OrderNo':
+                                orderItemContent.innerHTML +=
+                                    '<div class="item-row"><span class="item-row-title">订单编号：</span><span class="item-row-result">' +
+                                    orderList[i][key] + '</span></div>'
+                                break;
+                            case 'Address':
+                                if (orderList[i][key]) {
+                                    orderItemContent.innerHTML +=
+                                        '<div class="item-row"><span class="item-row-title">收件信息：</span><span class="item-row-result">' +
+                                        orderList[i][key] + '</span></div>'
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    if (orderList[i].PayDate > joinEndTime || serverTime > exChangeEndTime) {
+                        if (orderList[i].Address.length === 0) {
+                            orderItemContent.innerHTML +=
+                                '<div class="item-row"><span class="item-tip-text">活动已结束</span></div>'
+                        }
+                    } else if (canUsedNum <= 0 && orderList[i].Address.length === 0) {
+                        orderItemContent.innerHTML +=
+                            '<div class="item-row"><span class="item-tip-text"公仔已被领完了，下次早点来哦~</span></div>'
+                    }
+                    var orderItemBtn =
+                        '<div class="order-item-btn" onClick="orderBtnClick(this)" id="orderBtn" data-index=' + i +
+                        '>填写收件信息</div>';
+                    orderItem.innerHTML += orderItemTop;
+                    orderItem.appendChild(orderItemContent);
+                    var divider = '<div class="divider"></div>';
+                    if (canUsedNum > 0 && orderList[i].Address.length === 0 && orderList[i].PayDate <= joinEndTime &&
+                        serverTime <=
+                        exChangeEndTime) {
+                        orderItem.innerHTML += orderItemBtn;
+                        if (i < orderList.length - 1) {
+                            orderItem.innerHTML += divider;
+                        }
+                    }
+                    containerElement.appendChild(orderItem);
+                }
+                var tipWrap =
+                    '<div class="tip-wrap">温馨提示：</br>1、宝宝巴士将在收到您收件信息后的7个工作日内为您发出公仔;</br></br>2、如收件信息有变更或其他疑问，可联系QQ客服。VIP会员客服热线1：18059175351；热线2：18050313972</div>'
+                containerElement.innerHTML += tipWrap;
+            } else {
+                $('#container').addClass("hidden");
+                $('#empty').removeClass("hidden");
+            }
+        }
+
+        // 防抖函数
+        function debounce(fn, time, triggleNow) {
+            var t = null;
+
+            return function () {
+                var _self = this
+                args = arguments;
+
+                if (t) {
+                    clearTimeout(t);
+                }
+
+                if (triggleNow) {
+                    var exce = !t;
+
+                    t = setTimeout(function () {
+                        t = null;
+                    }, time)
+
+                    if (exce) {
+                        fn.apply(_self, args);
+                    }
+                } else {
+                    t = setTimeout(function () {
+                        fn.apply(_self, args);
+                        t = null;
+                    }, time)
+                }
+            }
+        }
+
+        function renderRefreshBtn() {
+            var refreshBtnWrap = document.createElement('div');
+            refreshBtnWrap.className = 'refresh-btn-wrap';
+            refreshBtnWrap.onclick = debounce(handleRefresh, 300, true);
+            refreshBtnWrap.innerHTML +=
+                '<img src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210204/e0b94f5550964c3bb4bffd3d6ee3ebd6.png" />';
+            document.body.appendChild(refreshBtnWrap);
+        }
+
+        function handleRefresh() {
+            getData();
+        }
+
+        function getData() {
+            $.ajax({
+                url: '/AppActivity/VipGift_OrderData',
+                data: {
+                    aid: aid,
+                },
+                method: 'GET',
+                dataType: 'json',
+                complete: function (res) {},
+                success: function (res) {
+                    console.log(res);
+                    if (res.ResultCode === "0") {
+                        orderList = res.Data.OrderList; //用户会员订单列表
+                        try {
+                            canUsedNum = res.data.activityData.CanUsedNum; //当前公仔数量
+                            joinBeginTime = res.data.activityData.JoinBeginTime; //购买会员开始时间
+                            joinEndTime = res.data.activityData.JoinEndTime; //购买会员截止时间
+                            exChangeEndTime = res.data.activityData.ExChangeEndTime; //兑换截止时间
+                            serverTime = res.data.activityData.ServerTime; //系统当前时间 毫秒
+                        } catch (error) {
+                            console.log(error)
+                        }
+                        $('#container').empty();
+                        renderList();
+                    } else {}
+                },
+                fail: function (err) {
+                    console.log("发送失败")
+                }
+            })
+        }
+
+        function orderBtnClick(e) {
+            try {
+                _czc.push(["_trackEvent", "填写收件信息领公仔", "点击"])
+            } catch (error) {
+                console.log(error)
+            }
+            var index = Number(e.getAttribute('data-index'));
+            if (orderList[index].OrderNo) {
+                var url = window.location.origin +
+                    '/appactivity/ModulePageApp?pageid=606824d411fa4642940a0b5e0f6bc9a4&aid=' + aid + '&OrderNo=' + orderList[index].orderNo;
+                window.location.href = '?Client=Target&Type=Inner&Url=' + encodeURIComponent(url) +
+                    '&Title=收件信息&IsHeader=1&IsNewWindow=1';
+            }
+        }
+    </script>
+</body>
+
+
+
+
+</html>

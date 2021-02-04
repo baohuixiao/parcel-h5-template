@@ -257,7 +257,7 @@
             var index = Number(e.getAttribute('data-index'));
             if (orderList[index].OrderNo) {
                 var url = window.location.origin +
-                    '/appactivity/ModulePageApp?pageid=606824d411fa4642940a0b5e0f6bc9a4&aid=' + aid + '&OrderNo=' + orderList[index].orderNo;
+                    '/appactivity/ModulePageApp?pageid=606824d411fa4642940a0b5e0f6bc9a4&aid=' + aid + '&OrderNo=' + orderList[index].OrderNo;
                 window.location.href = '?Client=Target&Type=Inner&Url=' + encodeURIComponent(url) +
                     '&Title=收件信息&IsHeader=1&IsNewWindow=1';
             }

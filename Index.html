@@ -36,13 +36,13 @@
 
 </head>
 
-<body style="visibility: hidden;">
+<body>
     <!-- 埋点数据 -->
     <!-- <div style="position: absolute;width:0;height:0;overflow:hidden;">
         <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
     </div> -->
 
-    <div class="container">
+    <div class="container" style="visibility: hidden;">
         <!-- 规则及订单按钮 -->
         <div id="orderBtn" class="order-btn"></div>
         <div onClick="openRules()" class="rule-btn"></div>
@@ -62,6 +62,13 @@
             src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210203/c3f346ccc0db462fbbdc48db37e1606d.png" />
         <img onClick="preventClick" class="index-bg"
             src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210203/fe05ce095f23420c87f27050f1facd8f.png" />
+        <!-- 底部按钮 -->
+        <img class="bottom-btn" id="endActiveBtn"
+            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210203/b0a0416c809147718e096605f603a4c6.png" />
+        <img class="bottom-btn" id="preHeatBtn" onClick="clickPreHeat()"
+            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210203/4f5ea7c66a9e4692b10ca07f9b84af0a.png" />
+        <img class="bottom-btn" id="openBtn"
+            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210204/7138fe4487e941f2abd3a91294a22ea5.gif" />
     </div>
     <!-- 规则弹窗 -->
     <div id="rules-container" class="rules-container" style="display: none;">
@@ -101,14 +108,6 @@
             </div>
         </div>
     </div>
-    <!-- 领取按钮 -->
-    <img class="bottom-btn" id="endActiveBtn"
-        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210203/b0a0416c809147718e096605f603a4c6.png" />
-    <img class="bottom-btn" id="preHeatBtn" onClick="clickPreHeat()"
-        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210203/4f5ea7c66a9e4692b10ca07f9b84af0a.png" />
-    <img class="bottom-btn" id="openBtn"
-        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210204/7138fe4487e941f2abd3a91294a22ea5.gif" />
-
 
     <!-- 服务端vue -->
     <!-- <script src="https://actcdn.babybus.com/lib/vue/vue.min.js"></script> -->
@@ -118,6 +117,7 @@
         var _czc = _czc || [];
         _czc.push(["_setAccount", "1279349239"]);
 
+        var aid = getQueryString('aid');
         var activityStatus = 0; // 0: 预热状态 1：开始状态  2：结束状态
 
         judgeActivityStatus();
@@ -126,13 +126,14 @@
             if (serverTime < joinBeginTime) {
                 activityStatus = 0;
             } else if (serverTime >= joinBeginTime &&
-                serverTime <= exChangeEndTime) {
+                serverTime <= joinEndTime) {
                 activityStatus = 1;
             } else {
                 activityStatus = 2;
             }
         }
 
+        // 防抖函数
         function debounce(fn, time, triggleNow) {
             var t = null;
 
@@ -165,7 +166,6 @@
 
         handleDollShow();
         handleBtnShow();
-        var aid = getQueryString('aid');
 
         //获取页面传参
         function getQueryString(name) {
@@ -179,10 +179,6 @@
         openBtn.onclick = debounce(onBtnClick, 500, true);
         var orderBtn = document.getElementById("orderBtn");
         orderBtn.onclick = debounce(orderBtnClick, 500, true);
-
-        window.onunload = function () {
-            console.log('window.onunload');
-        };
 
         function orderBtnClick() {
             if ((resultCode === '' || resultCode === '0') && activityStatus !== 0) {
@@ -322,7 +318,7 @@
                 document.body.removeChild(toastWrap);
             }, duration)
         }
-        $("body").css('visibility', 'visible');
+        $(".container").css('visibility', 'visible');
     </script>
 
 </body>

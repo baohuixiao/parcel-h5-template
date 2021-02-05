@@ -181,7 +181,9 @@
                         if (res.ResultCode === "0") {
                             that.orderList = res.Data.OrderList; //用户会员订单列表
                             $(".container").css('visibility', 'visible');
-                        } else {}
+                        } else {
+                            $(".container").css('visibility', 'visible');
+                        }
                     },
                     fail: function (err) {
                         console.log("发送失败");

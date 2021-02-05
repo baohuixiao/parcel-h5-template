@@ -24,7 +24,7 @@
 
 </head>
 
-<body style="visibility: hidden;">
+<body>
   <!-- 埋点 -->
   <!-- <div style="position: absolute;width:0;height:0;overflow:hidden;">
     <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
@@ -36,7 +36,7 @@
       <div class="pop-btn" onClick="closeSuccessPop(this)"></div>
     </div>
   </div>
-  <div class="container">
+  <div class="container" style="visibility: hidden;">
     <img class="address-bg" onClick="preventClick"
       src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210203/558b62dbbeb5423fb932b670fe555d91.png" />
     <div class="content-wrap">
@@ -298,7 +298,7 @@
       return false;
     }
 
-    $("body").css('visibility', 'visible');
+    $(".container").css('visibility', 'visible');
   </script>
 </body>
 

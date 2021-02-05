@@ -71,7 +71,7 @@ html {
   height: 1.1rem;
   border-radius: 0.2rem;
   background-color: #FFD5D4;
-  border: 0.01rem solid #DDDDDD;
+  border: 1px solid #DDDDDD;
   font-size: 0.32rem;
   font-weight: 500;
   color: #333333;
@@ -85,27 +85,29 @@ html {
 .order-item-contnet::before {
   content: '';
   position: absolute;
-  width: 0.3rem;
+  width: 0.15rem;
   height: 0.3rem;
   background: #fff;
-  left: -0.15rem;
+  left: -1px;
   top: -0.15rem;
-  border-radius: 50%;
-  border-bottom: 1px solid #ddd;
-  transform: rotate(-76deg);
+  border-radius: 0 0.3rem 0.3rem 0;
+  border: 1px solid #ddd;
+  /* transform: rotate(-76deg); */
+  border-left: 0;
 }
 
 .order-item-contnet::after {
   content: '';
   position: absolute;
-  width: 0.3rem;
+  width: 0.15rem;
   height: 0.3rem;
   background: #fff;
   top: -0.15rem;
-  right: -0.15rem;
-  border-radius: 50%;
-  border-bottom: 1px solid #ddd;
-  transform: rotate(76deg);
+  right: -1px;
+  border-radius: .3rem 0 0 .3rem;
+  border: 1px solid #ddd;
+  border-right: 0;
+  /* transform: rotate(76deg); */
 }
 
 .order-item-contnet {
@@ -118,6 +120,7 @@ html {
   font-weight: 500;
   box-sizing: border-box;
   padding: 0.3rem 0 0 0.39rem;
+  border-top: 0;
 }
 
 .item-row {

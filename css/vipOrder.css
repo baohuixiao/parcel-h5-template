@@ -37,6 +37,13 @@ html {
   position: relative;
 }
 
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 7.5rem;
+}
+
 .order-item {
   width: 6.7rem;
   margin-top: 0.4rem;
@@ -139,11 +146,8 @@ html {
 }
 
 .empty {
-  position: fixed;
-  width: 100vw;
+  width: 7.5rem;
   height: 100vh;
-  top: 0;
-  left: 0;
   background-color: #fff;
 }
 

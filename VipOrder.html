@@ -180,6 +180,12 @@
                         console.log(res);
                         if (res.ResultCode === "0") {
                             that.orderList = res.Data.OrderList; //用户会员订单列表
+                            try {
+                                that.serverTime = res.Data.ActivityExtData.ServerTime;
+                                that.canUsedNum = res.Data.ActivityExtData.CanUsedNum;
+                            } catch(err) {
+                                console.log(err);
+                            }
                             $(".container").css('visibility', 'visible');
                         } else {
                             $(".container").css('visibility', 'visible');

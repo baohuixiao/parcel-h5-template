@@ -41,15 +41,15 @@ html {
 }
 
 .container {
-  width: 7.5rem;
+  width: 100vw;
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   -webkit-overflow-scrolling: touch;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   position: relative;
 }
 

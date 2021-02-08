@@ -3,9 +3,9 @@
   padding: 0;
 }
 
-html {
+/* html {
   background-color: #ff734c;
-}
+} */
 
 a {
   text-decoration: none;
@@ -40,6 +40,8 @@ img {
   position: relative;
   width: 7.5rem;
   margin: 0 auto;
+  height: 100vh;
+  background-color: #ff734c;
 }
 
 .address-bg {

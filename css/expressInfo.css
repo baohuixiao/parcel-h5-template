@@ -137,8 +137,8 @@ textarea::-webkit-input-placeholder {
 }
 
 .pop-wrap {
-  width: 6.33rem;
-  height: 7.02rem;
+  width: 87%;
+  /* height: 7.02rem; */
   position: absolute;
   left: 50%;
   /* right: 0; */
@@ -148,8 +148,8 @@ textarea::-webkit-input-placeholder {
 }
 
 .pop {
-  width: 6.63rem;
-  height: 7.02rem;
+  /* width: 6.63rem;
+  height: 7.02rem; */
 }
 
 .pop-btn {

@@ -63,7 +63,10 @@
     _czc.push(["_setAccount", "1279349239"]);
     var OrderNo = getQueryString('OrderNo');
     var aid = getQueryString('aid');
-
+    if (document.documentElement.clientHeight < document.documentElement.clientWidth) {
+      document.querySelector(".pop-wrap").style.width = '50%';
+    }
+    
     //获取页面传参
     function getQueryString(name) {
       var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");

@@ -309,7 +309,7 @@
 
             var toastWrap = document.createElement('div');
             toastWrap.style.cssText =
-                'position: fixed; font-size: 0.32rem; color: #fff; z-index: 5; max-width: 5rem;text-align: center;top: 40%;padding: 0.1rem 0.3rem;border-radius: 0.5rem;background-color: rgba(0, 0, 0, 0.7);display:flex;left: 50%;transform: translateX(-50%);'
+                'position: fixed; font-size: 0.32rem; color: #fff; z-index: 5; max-width: 5rem; min-width: 4rem;text-align: center;top: 40%;padding: 0.1rem 0.3rem;border-radius: 0.5rem;background-color: rgba(0, 0, 0, 0.7);left: 50%;transform: translateX(-50%);'
             toastWrap.innerText = text;
             document.body.appendChild(toastWrap);
             timer = setTimeout(function () {

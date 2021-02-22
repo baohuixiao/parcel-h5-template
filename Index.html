@@ -274,6 +274,11 @@
         function PayVipPackageCallback(e) {
             var data = JSON.parse(e);
             if (data.TradeStatus == "1") {
+                try {
+                    _czc.push(["_trackEvent", "购买成功", "回调"])
+                } catch (error) {
+                    console.log(error)
+                }
                 jumpToOrderList();
             } else {
                 console.log('购买失败');

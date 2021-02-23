@@ -31,9 +31,9 @@
  .container {
    position: relative;
    width: 7.5rem;
-   padding-bottom: 1.7rem;
+   padding-bottom: 1.88rem;
    margin: 0 auto;
-   background-color: #ff734c;
+   background-color: #ff7a29;
  }
 
  .container>img {
@@ -50,7 +50,7 @@
 
  .bottom-btn {
    position: fixed;
-   height: 1.7rem;
+   height: 1.88rem;
    width: 7.5rem !important;
    bottom: 0;
    left: 50%;
@@ -59,20 +59,20 @@
 
  .order-btn {
    position: absolute;
-   right: 1.15rem;
+   right: 1.32rem;
    top: .14rem;
-   width: 1.04rem;
-   height: 0.94rem;
+   width: 0.9rem;
+   height: 1.2rem;
  }
 
  /* 规则弹窗 */
 
  .rule-btn {
    position: absolute;
-   right: .16rem;
+   right: .2rem;
    top: 0.37rem;
-   width: .92rem;
-   height: .83rem;
+   width: .9rem;
+   height: 1.2rem;
  }
 
  .rules-container {

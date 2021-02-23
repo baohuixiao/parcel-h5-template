@@ -183,7 +183,7 @@
                             try {
                                 that.serverTime = res.Data.ActivityExtData.ServerTime;
                                 that.canUsedNum = res.Data.ActivityExtData.CanUsedNum;
-                            } catch(err) {
+                            } catch (err) {
                                 console.log(err);
                             }
                             $(".container").css('visibility', 'visible');
@@ -205,11 +205,35 @@
                 if (r != null) return decodeURI(r[2]);
                 return null;
             },
+
+            addPageShowListener: function () {
+                var that = this;
+                var hiddenProperty = 'hidden' in document ? 'hidden' :
+                    'webkitHidden' in document ? 'webkitHidden' :
+                    'mozHidden' in document ? 'mozHidden' :
+                    null;
+                var visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
+                var onVisibilityChange = function () {
+                    if (!document[hiddenProperty]) {
+                        console.log('我出现了');
+                        var result = localStorage.getItem('toFresh');
+                        localStorage.removeItem('toFresh');
+                        if (result !== null && result === 'true') {
+                            that.clickReLoad();
+                        }
+                    } else {
+                        console.log('我隐藏了');
+                        localStorage.removeItem('toFresh');
+                    }
+                }
+                document.addEventListener(visibilityChangeEvent, onVisibilityChange)
+            },
         },
 
         mounted: function () {
             this.aid = this.getQueryString('aid');
             this.getOrderList();
+            this.addPageShowListener();
         }
     })
 

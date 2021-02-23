@@ -144,7 +144,7 @@ textarea::-webkit-input-placeholder {
   /* right: 0; */
   /* margin: 0 auto; */
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -60%);
 }
 
 .pop {

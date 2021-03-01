@@ -68,29 +68,10 @@
                     <span>¥{{orderItem.Price}}</span>
                 </div>
                 <div class="order-item-contnet">
-                    <div class="item-row" v-if="orderItem.StartDateName">
-                        <span class="item-row-title">会员生效时间：</span>
-                        <span class="item-row-result">{{orderItem.StartDateName}}</span>
-                    </div>
-                    <div class="item-row" v-if="orderItem.EndDateName">
-                        <span class="item-row-title">会员到期时间：</span>
-                        <span class="item-row-result">{{orderItem.EndDateName}}</span>
-                    </div>
-                    <div class="item-row" v-if="orderItem.PayDateShow">
-                        <span class="item-row-title">购买时间：</span>
-                        <span class="item-row-result">{{orderItem.PayDateShow}}</span>
-                    </div>
-                    <div class="item-row" v-if="orderItem.ChannelTypeName">
-                        <span class="item-row-title">购买方式：</span>
-                        <span class="item-row-result">{{orderItem.ChannelTypeName}}</span>
-                    </div>
-                    <div class="item-row" v-if="orderItem.OrderNo">
-                        <span class="item-row-title">订单编号：</span>
-                        <span class="item-row-result">{{orderItem.OrderNo}}</span>
-                    </div>
-                    <div class="item-row" v-if="orderItem.Address.length > 0">
-                        <span class="item-row-title">收件信息：</span>
-                        <span class="item-row-result">{{orderItem.Address}}</span>
+                    <div class="item-row" v-if="itemNameMap(name) && (value || value === 0)"
+                        v-for="(value, name) in orderItem">
+                        <span class="item-row-title">{{itemNameMap(name)}}：</span>
+                        <span class="item-row-result">{{value}}</span>
                     </div>
                     <div class="item-row"
                         v-if="(orderItem.PayDate > joinEndTime || serverTime > exChangeEndTime) && orderItem.Address.length === 0">
@@ -142,10 +123,25 @@
             joinEndTime,
             exChangeEndTime,
             serverTime,
-            canUsedNum
+            canUsedNum,
+            itemChineseName: {
+                StartDateName: "会员生效时间",
+                EndDateName: "会员到期时间",
+                PayDateShow: "购买时间",
+                ChannelTypeName: "购买方式",
+                OrderNo: "订单编号",
+                Address: "收件信息",
+            }
         },
 
         methods: {
+
+            itemNameMap: function (value) {
+                if (this.itemChineseName.hasOwnProperty(value)) {
+                    return this.itemChineseName[value]
+                }
+                return false
+            },
 
             clickReLoad: debounce(function () {
                 this.getOrderList();

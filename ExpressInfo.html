@@ -129,7 +129,6 @@
     function resizeHandler() {
       var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
       var activeElement = document.activeElement;
-      console.log(resizeHeight, originHeight)
       if (resizeHeight < originHeight) {
         console.log('键盘弹起后逻辑');
         // 键盘弹起后逻辑
@@ -196,7 +195,6 @@
       var name = $("#name").val();
       var address = $("#textarea").val();
       var tip = '请输入正确的信息';
-      console.log(isPoneAvailable(phone))
       if (isPoneAvailable(phone) && address.length >= 6 && name.length >= 2) {
         if (navigator.onLine) {
           postData(phone, name, address)
@@ -289,6 +287,15 @@
         passive: false
       })
       document.querySelector(".shadow").style.display = 'none';
+      try {
+        if (navigator.userAgent.toLowerCase().indexOf('android') >= 0) {
+          window.AndroidService.closeBrowsers();
+        } else {
+          window.webkit.messageHandlers.closeBrowsers.postMessage('');
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     function handle(event) {

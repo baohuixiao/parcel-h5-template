@@ -2,377 +2,361 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <meta name="format-detection" content="telephone=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-    <title>送周边首页</title>
-    <script src="https://act.development.platform.babybus.com/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://act.development.platform.babybus.com/lib/tool/vconsole.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <title>送周边首页</title>
+  <script src="https://act.development.platform.babybus.com/lib/jquery/dist/jquery.min.js"></script>
+  <script src="https://act.development.platform.babybus.com/lib/tool/vconsole.min.js"></script>
 
-    <script>
-        // 服务端数据
-        var resultCode = ''; //错误号 ''
-        var canUsedNum = 1; //当前公仔数量
-        var accountID = 0; //当前登录的帐号ID
-        var androidPackageID = 2;
-        var iosPackageID = 1;
-        var joinBeginTime = 1612330554; //活动可以参与的开始时间(秒)
-        var joinEndTime = 1612589754; //活动可以参与的截止时间(秒)
-        var exChangeEndTime = 1612848954; //活动兑换的截止时间(秒)
-        var serverTime = 1612848953; //服务器当前时间
+  <script>
+    // 服务端数据
+    var resultCode = ''; //错误号 ''
+    var canUsedNum = 1; //当前公仔数量
+    var accountID = 0; //当前登录的帐号ID
+    var androidPackageID = 2;
+    var iosPackageID = 1;
+    var joinBeginTime = 1612330554; //活动可以参与的开始时间(秒)
+    var joinEndTime = 1612589754; //活动可以参与的截止时间(秒)
+    var exChangeEndTime = 1612848954; //活动兑换的截止时间(秒)
+    var serverTime = 1612848953; //服务器当前时间
 
-        // 页面适配
-        (function () {
-            var html = document.documentElement;
-            var windowWidth = html.clientWidth > 600 ? 600 : html.clientWidth;
-            html.style.fontSize = windowWidth / 7.5 + 'px';
-        }());
-        var vConsole = new VConsole();
-    </script>
+    // 页面适配
+    (function () {
+      var html = document.documentElement;
+      var windowWidth = html.clientWidth > 600 ? 600 : html.clientWidth;
+      html.style.fontSize = windowWidth / 7.5 + 'px';
+    }());
+    var vConsole = new VConsole();
+  </script>
 
-    <link rel="stylesheet" href='./css/index.css' />
+  <link rel="stylesheet" href='./css/index.css' />
 
 </head>
 
 <body>
-    <!-- 埋点数据 -->
-    <div style="position: absolute;width:0;height:0;overflow:hidden;">
-        <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
+  <!-- 埋点数据 -->
+  <div style="position: absolute;width:0;height:0;overflow:hidden;">
+    <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
+  </div>
+
+  <div id="app" class="container" v-show="pageShow">
+    <!-- 规则及订单按钮 -->
+    <div class="order-btn" @click="clickOrderBtn"></div>
+    <div onClick="openRules()" class="rule-btn"></div>
+    <img v-if="canUsedNum > 0" class="index-bg"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/6ad03d39b8944c48b1c015e2340f8d2e.png" />
+    <img v-else class="index-bg"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/0621106ed6784bb9ad095ddf8a2445e3.png" />
+    <img class="index-bg"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/2c2a8b7c1d184cf1a2aa6ef96c01eff5.png" />
+    <img class="index-bg"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/d2367ae21fd34f9999841495f746b05d.png" />
+    <img class="index-bg"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/89b653d84f6a4db2b8391cb0855423bf.png" />
+    <!-- 底部按钮 -->
+    <img v-if="activityStatus === 2" class="bottom-btn"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/754a60314501425fa848b7b3bc417c49.png" />
+    <img v-if="activityStatus === 0" class="bottom-btn" @click="clickPreHeat"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/246f542d096b40b5a67a2df4066957ca.png" />
+    <img v-if="activityStatus === 1" class="bottom-btn" @click="clickOpenBtn"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/1ba57d16ec5b4345976848f56c0acd04.gif" />
+  </div>
+  <!-- 规则弹窗 -->
+  <div id="rules-container" class="rules-container" style="display: none;">
+    <div class="rules-mask" onClick="closeRules()"></div>
+    <div class="rules-list">
+      <img class="close-btn" onClick="closeRules()"
+        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210203/c8c0d22d5a244ed2a8cf786c14427680.png" />
+      <p class="rules-title">活动规则</p>
+      <div id="rules-item-wrap" class="rules-item-wrap">
+        <p class="rules-item">
+          1、活动时间：2021.2.26-2021.2.28
+        </p>
+        <p class="rules-item">
+          2、宝宝巴士的用户在活动期间购买【儿歌畅享VIP】的一年会员，可免费获赠“会唱歌的数字AR互动有声书”1台，限量150份先到先得；
+        </p>
+        <p class="rules-item" style="color: orange">
+          3、同一用户可多次购买本活动套餐，儿歌畅享VIP有效期累加生效；
+        </p>
+        <p class="rules-item" style="color: orange">
+          4、奖品说明：已成功购买活动套餐的用户，请及时在【订单记录】页点击【填写收件信息领奖品】按钮，填写并成功提交收货地址即可完成申领；
+        </p>
+        <p class="rules-item">
+          5、由于活动参与人数较多，赠送的奖品会在您提交收件信息后的7个工作日内发出，请您耐心等待；
+        </p>
+        <p class="rules-item">
+          6、付费购买该会员套餐的用户，暂不支持退款退货；
+        </p>
+        <p class="rules-item">
+          7、关于会员使用须知，请参照【常见问题】和【会员服务协议】；
+        </p>
+        <p class="rules-item">
+          8、如果有疑问的地方，可联系VIP会员客服热线1：18059175351；热线2：18050313972
+        </p>
+        <p class="rules-item">
+          9、关于该活动的一切解释权，归宝宝巴士所有。
+        </p>
+      </div>
     </div>
-
-    <div class="container" style="visibility: hidden;">
-        <!-- 规则及订单按钮 -->
-        <div id="orderBtn" class="order-btn"></div>
-        <div onClick="openRules()" class="rule-btn"></div>
-        <img id="activeBg" onClick="preventClick" class="index-bg"
-            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/6ad03d39b8944c48b1c015e2340f8d2e.png" />
-        <img id="grayBg" onClick="preventClick" class="index-bg"
-            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/0621106ed6784bb9ad095ddf8a2445e3.png" />
-        <img onClick="preventClick" class="index-bg"
-            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/2c2a8b7c1d184cf1a2aa6ef96c01eff5.png" />
-        <img onClick="preventClick" class="index-bg"
-            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/d2367ae21fd34f9999841495f746b05d.png" />
-        <img onClick="preventClick" class="index-bg"
-            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/89b653d84f6a4db2b8391cb0855423bf.png" />
-        <!-- 底部按钮 -->
-        <img class="bottom-btn" id="endActiveBtn"
-            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/754a60314501425fa848b7b3bc417c49.png" />
-        <img class="bottom-btn" id="preHeatBtn" onClick="clickPreHeat()"
-            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/246f542d096b40b5a67a2df4066957ca.png" />
-        <img class="bottom-btn" id="openBtn"
-            src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/1ba57d16ec5b4345976848f56c0acd04.gif" />
-    </div>
-    <!-- 规则弹窗 -->
-    <div id="rules-container" class="rules-container" style="display: none;">
-        <div class="rules-mask" onClick="closeRules()"></div>
-        <div class="rules-list">
-            <img class="close-btn" onClick="closeRules()"
-                src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210203/c8c0d22d5a244ed2a8cf786c14427680.png" />
-            <p class="rules-title">活动规则</p>
-            <div id="rules-item-wrap" class="rules-item-wrap">
-                <p class="rules-item">
-                    1、活动时间：2021.2.26-2021.2.28
-                </p>
-                <p class="rules-item">
-                    2、宝宝巴士的用户在活动期间购买【儿歌畅享VIP】的一年会员，可免费获赠“会唱歌的数字AR互动有声书”1台，限量150份先到先得；
-                </p>
-                <p class="rules-item" style="color: orange">
-                    3、同一用户可多次购买本活动套餐，儿歌畅享VIP有效期累加生效；
-                </p>
-                <p class="rules-item" style="color: orange">
-                    4、奖品说明：已成功购买活动套餐的用户，请及时在【订单记录】页点击【填写收件信息领奖品】按钮，填写并成功提交收货地址即可完成申领；
-                </p>
-                <p class="rules-item">
-                    5、 由于活动参与人数较多，赠送的奖品会在您提交收件信息后的7个工作日内发出，请您耐心等待；
-                </p>
-                <p class="rules-item">
-                    6、付费购买该会员套餐的用户，暂不支持退款退货；
-                </p>
-                <p class="rules-item">
-                    7、关于会员使用须知，请参照【常见问题】和【会员服务协议】；
-                </p>
-                <p class="rules-item">
-                    8、如果有疑问的地方，可联系VIP会员客服热线1：18059175351；热线2：18050313972
-                </p>
-                <p class="rules-item">
-                    9、关于该活动的一切解释权，归宝宝巴士所有。
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 服务端vue -->
-    <!-- <script src="https://actcdn.babybus.com/lib/vue/vue.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script>
-        // 友盟埋点
-        var _czc = _czc || [];
-        _czc.push(["_setAccount", "1279349239"]);
-
-        var aid = getQueryString('aid');
-        var activityStatus = 0; // 0: 预热状态 1：开始状态  2：结束状态
-
-        judgeActivityStatus();
-
-        function judgeActivityStatus() {
-            if (serverTime < joinBeginTime) {
-                activityStatus = 0;
-            } else if (serverTime >= joinBeginTime &&
-                serverTime <= joinEndTime) {
-                activityStatus = 1;
-            } else {
-                activityStatus = 2;
-            }
-        }
-
-        // 防抖函数
-        function debounce(fn, time, triggleNow) {
-            var t = null;
-
-            return function () {
-                var _self = this
-                args = arguments;
-
-                if (t) {
-                    clearTimeout(t);
-                }
-
-                if (triggleNow) {
-                    var exce = !t;
-
-                    t = setTimeout(function () {
-                        t = null;
-                    }, time)
-
-                    if (exce) {
-                        fn.apply(_self, args);
-                    }
-                } else {
-                    t = setTimeout(function () {
-                        fn.apply(_self, args);
-                        t = null;
-                    }, time)
-                }
-            }
-        }
-
-        handleDollShow();
-        handleBtnShow();
-
-        //获取页面传参
-        function getQueryString(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-            var r = window.location.search.substr(1).match(reg);
-            if (r != null) return decodeURI(r[2]);
-            return null;
-        }
-
-        var openBtn = document.getElementById("openBtn");
-        openBtn.onclick = debounce(onBtnClick, 500, true);
-        var orderBtn = document.getElementById("orderBtn");
-        orderBtn.onclick = debounce(orderBtnClick, 500, true);
-
-        function orderBtnClick() {
-            if ((resultCode === '' || resultCode === '0') && activityStatus !== 0) {
-                try {
-                    _czc.push(["_trackEvent", "订单记录", "点击"])
-                } catch (error) {
-                    console.log(error)
-                }
-                if (accountID > 0) {
-                    jumpToOrderList();
-                } else {
-                    sessionStorage.setItem('preClick', 'orderClick');
-                    window.location.href = '?Client=Login';
-                }
-            } else if (activityStatus === 0) {
-                showToast('2月26日-2月28日开抢！', 2000);
-            }
-        }
-
-        // 规则按钮点击
-        function openRules() {
-            $('.rules-container').show();
-            document.getElementById("rules-item-wrap").scrollTop = 0;
-            $('body').addClass('body');
-        }
-
-        // 关闭规则弹窗
-        function closeRules() {
-            $('.rules-container').hide();
-            $('body').removeClass('body');
-        }
-
-        function handleDollShow() {
-            if (canUsedNum > 0) {
-                $('#grayBg').addClass("hidden");
-            } else {
-                $('#activeBg').addClass("hidden");
-            }
-        }
-
-        function handleBtnShow() {
-            switch (activityStatus) {
-                case 0:
-                    $('#endActiveBtn').addClass("hidden");
-                    $('#openBtn').addClass("hidden");
-                    break;
-                case 1:
-                    $('#preHeatBtn').addClass("hidden");
-                    $('#endActiveBtn').addClass("hidden");
-                    break;
-                case 2:
-                    $('#preHeatBtn').addClass("hidden");
-                    $('#openBtn').addClass("hidden");
-                    break;
-                default:
-                    $('#preHeatBtn').addClass("hidden");
-                    $('#endActiveBtn').addClass("hidden");
-                    $('#openBtn').addClass("hidden");
-                    break;
-            }
-        }
-
-        function onBtnClick() {
-            if ((resultCode === '' || resultCode === '0') && activityStatus === 1) {
-                try {
-                    if (canUsedNum > 0) {
-                        _czc.push(["_trackEvent", "立即领取", "点击"])
-                    } else {
-                        _czc.push(["_trackEvent", "立即开通", "点击"])
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
-                if (accountID > 0) {
-                    handlePayment();
-                } else {
-                    sessionStorage.setItem('preClick', 'buyClick');
-                    window.location.href = '?Client=Login';
-                }
-            }
-        }
-
-        function handlePayment() {
-            var packageID = androidPackageID;
-            if (navigator.userAgent.toLowerCase().indexOf('android') >= 0) {
-                packageID = androidPackageID;
-            } else {
-                packageID = iosPackageID;
-            }
-            window.location.href = "?Client=VipPackage&PackageID=" + packageID + "&CallbackFun=PayVipPackageCallback";
-        }
-
-        function PayVipPackageCallback(e) {
-            var data = JSON.parse(e);
-            if (data.TradeStatus == "1") {
-                try {
-                    _czc.push(["_trackEvent", "购买成功", "回调"])
-                } catch (error) {
-                    console.log(error)
-                }
-                jumpToOrderList();
-            } else {
-                console.log('购买失败');
-            }
-        }
-
-        //禁止图片点击
-        function preventClick(e) {
-            e.stopPropagation()
-            e.preventDefault()
-            return false;
-        }
-
-
-        function clickPreHeat() {
-            showToast('2月26日-2月28日开抢！', 2000)
-        }
-
-        var toastFlag = true;
-
-        // toast控件封装
-        function showToast(text, duration) {
-            if (!(text.trim()) || !toastFlag) {
-                return;
-            }
-            var timer = null;
-            toastFlag = false;
-
-            var toastWrap = document.createElement('div');
-            toastWrap.style.cssText =
-                'position: fixed; font-size: 0.32rem; color: #fff; z-index: 5; max-width: 5rem; min-width: 4rem;text-align: center;top: 40%;padding: 0.1rem 0.3rem;border-radius: 0.5rem;background-color: rgba(0, 0, 0, 0.7);left: 50%;transform: translateX(-50%);'
-            toastWrap.innerText = text;
-            document.body.appendChild(toastWrap);
-            timer = setTimeout(function () {
-                toastFlag = true;
-                clearTimeout(timer)
-                document.body.removeChild(toastWrap);
-            }, duration)
-        }
-        $(".container").css('visibility', 'visible');
-
-        function jumpToOrderList() {
-            var url = window.location.origin +
-                '/appactivity/ModulePageApp?pageid=06e9200a16174a839894ba9f5b8cd52c&aid=' + aid;
-            window.location.href = '?Client=Target&Type=Inner&Url=' + encodeURIComponent(url) +
-                '&Title=订单列表&IsHeader=1&IsNewWindow=1';
-        }
-
-        var preClickProcessor = {
-            orderClick() {
-                jumpToOrderList();
-            },
-            buyClick() {
-                handlePayment();
-            },
-        }
-
-        // 检查上一次的操作情况
-        function checkPreOperation() {
-            var result = sessionStorage.getItem('preClick');
-            if (result !== null) {
-                try {
-                    if (accountID > 0) {
-                        preClickProcessor[result]();
-                    }
-                } catch (err) {
-                    console.log(err)
-                }
-                sessionStorage.removeItem('preClick');
-            }
-        }
-
-        var showTimer = null;
-
-        function addPageShowListener() {
-            var hiddenProperty = 'hidden' in document ? 'hidden' :
-                'webkitHidden' in document ? 'webkitHidden' :
-                'mozHidden' in document ? 'mozHidden' :
-                null;
-            var visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
-            var onVisibilityChange = function () {
-                if (!document[hiddenProperty]) {
-                    console.log('我出现了');
-                    if (accountID <= 0) {
-                        showTimer = setTimeout(function () {
-                            clearTimeout(showTimer)
-                            sessionStorage.removeItem('preClick');
-                        }, 1000)
-                    }
-                } else {
-                    console.log('我隐藏了');
-                }
-            };
-            document.addEventListener(visibilityChangeEvent, onVisibilityChange);
-        }
-
-        checkPreOperation();
-        addPageShowListener();
-    </script>
-
+  </div>
 </body>
+
+<!-- 服务端vue -->
+<!-- <script src="https://actcdn.babybus.com/lib/vue/vue.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  // 友盟埋点
+  var _czc = _czc || [];
+  var aid = '';
+  _czc.push(["_setAccount", "1279349239"]);
+  aid = getQueryString("aid");
+
+  var app = new Vue({
+    el: "#app",
+
+    data: {
+      pageShow: false,
+      activityStatus: 0, // 0: 预热状态 1：开始状态  2：结束状态
+      canUsedNum, // 周边数量
+      preClickProcessor: {
+        orderClick() {
+          jumpToOrderList();
+        },
+        buyClick() {
+          handlePayment();
+        },
+      },
+      showTimer: null,
+      preHeatText: "2月26日-2月28日开抢！",
+    },
+
+    methods: {
+      judgeActivityStatus: function () {
+        if (serverTime < joinBeginTime) {
+          this.activityStatus = 0;
+        } else if (serverTime >= joinBeginTime && serverTime <= joinEndTime) {
+          this.activityStatus = 1;
+        } else {
+          this.activityStatus = 2;
+        }
+      },
+
+      // 订单记录点击
+      clickOrderBtn: debounce(
+        function () {
+          if (
+            (resultCode === "" || resultCode === "0") &&
+            this.activityStatus !== 0
+          ) {
+            _czc.push(["_trackEvent", "订单记录", "点击"]);
+            if (accountID > 0) {
+              jumpToOrderList();
+            } else {
+              sessionStorage.setItem("preClick", "orderClick");
+              window.location.href = "?Client=Login";
+            }
+          } else if (this.activityStatus === 0) {
+            showToast(this.preHeatText);
+          }
+        }, 500, true),
+
+      // 购买点击
+      clickOpenBtn: debounce(
+        function () {
+          if (
+            (resultCode === "" || resultCode === "0") &&
+            this.activityStatus === 1
+          ) {
+            if (this.canUsedNum > 0) {
+              _czc.push(["_trackEvent", "立即领取", "点击"]);
+            } else {
+              _czc.push(["_trackEvent", "立即开通", "点击"]);
+            }
+            if (accountID > 0) {
+              handlePayment();
+            } else {
+              sessionStorage.setItem("preClick", "buyClick");
+              window.location.href = "?Client=Login";
+            }
+          }
+        },
+        500,
+        true
+      ),
+
+      // 检查上一次的操作情况
+      checkPreOperation: function () {
+        var result = sessionStorage.getItem("preClick");
+        if (result !== null) {
+          try {
+            if (accountID > 0) {
+              this.preClickProcessor[result]();
+            }
+          } catch (err) {
+            console.log(err);
+          }
+          sessionStorage.removeItem("preClick");
+        }
+      },
+
+      addPageShowListener: function () {
+        var that = this;
+        var hiddenProperty =
+          "hidden" in document ?
+          "hidden" :
+          "webkitHidden" in document ?
+          "webkitHidden" :
+          "mozHidden" in document ?
+          "mozHidden" :
+          null;
+        var visibilityChangeEvent = hiddenProperty.replace(/hidden/i, "visibilitychange");
+        var onVisibilityChange = function () {
+          if (!document[hiddenProperty]) {
+            console.log("我出现了");
+            if (accountID <= 0) {
+              that.showTimer = setTimeout(function () {
+                clearTimeout(that.showTimer);
+                sessionStorage.removeItem("preClick");
+              }, 1000);
+            }
+          } else {
+            console.log("我隐藏了");
+          }
+        };
+        document.addEventListener(visibilityChangeEvent, onVisibilityChange);
+      },
+
+      clickPreHeat: function () {
+        showToast(this.preHeatText);
+      },
+    },
+
+    created: function () {
+      this.judgeActivityStatus();
+    },
+
+    mounted: function () {
+      this.pageShow = true;
+      this.checkPreOperation();
+      this.addPageShowListener();
+    },
+  });
+
+  // 防抖函数
+  function debounce(fn, time, triggleNow) {
+    var t = null;
+
+    return function () {
+      var _self = this;
+      args = arguments;
+
+      if (t) {
+        clearTimeout(t);
+      }
+
+      if (triggleNow) {
+        var exce = !t;
+
+        t = setTimeout(function () {
+          t = null;
+        }, time);
+
+        if (exce) {
+          fn.apply(_self, args);
+        }
+      } else {
+        t = setTimeout(function () {
+          fn.apply(_self, args);
+          t = null;
+        }, time);
+      }
+    };
+  }
+
+  // 规则按钮点击
+  function openRules() {
+    $(".rules-container").show();
+    document.getElementById("rules-item-wrap").scrollTop = 0;
+    $("body").addClass("body");
+  }
+
+  // 关闭规则弹窗
+  function closeRules() {
+    $(".rules-container").hide();
+    $("body").removeClass("body");
+  }
+
+  // 购买回调
+  function PayVipPackageCallback(e) {
+    var data = JSON.parse(e);
+    if (data.TradeStatus == "1") {
+      _czc.push(["_trackEvent", "购买成功", "回调"]);
+      jumpToOrderList();
+    } else {
+      console.log("购买失败");
+    }
+  }
+
+  // toast组件封装
+  var showToast = (function () {
+    var div;
+    var toastFlag = true;
+    var timer = null;
+    return function (text, time) {
+      if (!text.trim() || !toastFlag) {
+        return;
+      }
+      var duration = time ? time : 2000;
+      toastFlag = false;
+      timer = null;
+      if (!div) {
+        div = document.createElement("div");
+        div.style.cssText =
+          "position: fixed; display: none; font-size: 0.32rem; color: #fff; z-index: 5; max-width: 5rem; min-width: 4rem;text-align:center;top: 40%;padding: 0.1rem 0.3rem;border-radius: 0.5rem;background-color: rgba(0, 0, 0, 0.7);left:50%;transform: translateX(-50%);";
+        document.body.appendChild(div);
+      }
+      div.innerText = text;
+      div.style.display = 'block'
+      timer = setTimeout(function () {
+        toastFlag = true;
+        clearTimeout(timer);
+        div.style.display = 'none'
+      }, duration)
+    }
+  }())
+
+  // 跳转到订单列表页
+  function jumpToOrderList() {
+    var url =
+      window.location.origin +
+      "/appactivity/ModulePageApp?pageid=06e9200a16174a839894ba9f5b8cd52c&aid=" + aid;
+    window.location.href =
+      "?Client=Target&Type=Inner&Url=" + encodeURIComponent(url) + "&Title=订单列表&IsHeader=1&IsNewWindow=1";
+  }
+
+  //获取页面传参
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return decodeURI(r[2]);
+    return null;
+  }
+
+  function handlePayment() {
+    var packageID = androidPackageID;
+    if (navigator.userAgent.toLowerCase().indexOf("android") >= 0) {
+      packageID = androidPackageID;
+    } else {
+      packageID = iosPackageID;
+    }
+    window.location.href =
+      "?Client=VipPackage&PackageID=" +
+      packageID +
+      "&CallbackFun=PayVipPackageCallback";
+  }
+</script>
 
 </html>

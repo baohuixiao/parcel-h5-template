@@ -3,10 +3,6 @@
   padding: 0;
 }
 
-/* html {
-  background-color: #ff734c;
-} */
-
 a {
   text-decoration: none;
 }
@@ -40,8 +36,8 @@ img {
   position: relative;
   width: 7.5rem;
   margin: 0 auto;
-  height: 100vh;
-  background-color: #ff7a29;
+  min-height: 100vh;
+  background-color: #73D335;
 }
 
 .address-bg {
@@ -67,12 +63,9 @@ img {
 }
 
 .bottom-btn {
-  position: fixed;
-  left: 50%;
+  position: absolute;
   bottom: 0;
-  width: 7.5rem;
-  height: 1.65rem;
-  transform: translateX(-50%);
+  height: 1.58rem;
 }
 
 .input {
@@ -137,7 +130,7 @@ textarea::-webkit-input-placeholder {
 }
 
 .pop-wrap {
-  width: 86%;
+  width: 84.93%;
   /* height: 7.02rem; */
   position: absolute;
   left: 50%;

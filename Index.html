@@ -43,26 +43,31 @@
   </div>
 
   <div id="app" class="container" v-show="pageShow">
-    <!-- 规则及订单按钮 -->
-    <div class="order-btn" @click="clickOrderBtn"></div>
-    <div onClick="openRules()" class="rule-btn"></div>
-    <img v-if="canUsedNum > 0" class="index-bg"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/6ad03d39b8944c48b1c015e2340f8d2e.png" />
-    <img v-else class="index-bg"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/0621106ed6784bb9ad095ddf8a2445e3.png" />
-    <img class="index-bg"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/2c2a8b7c1d184cf1a2aa6ef96c01eff5.png" />
-    <img class="index-bg"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/d2367ae21fd34f9999841495f746b05d.png" />
-    <img class="index-bg"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/89b653d84f6a4db2b8391cb0855423bf.png" />
-    <!-- 底部按钮 -->
-    <img v-if="activityStatus === 2" class="bottom-btn"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/754a60314501425fa848b7b3bc417c49.png" />
-    <img v-if="activityStatus === 0" class="bottom-btn" @click="clickPreHeat"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/246f542d096b40b5a67a2df4066957ca.png" />
-    <img v-if="activityStatus === 1" class="bottom-btn" @click="clickOpenBtn"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/1ba57d16ec5b4345976848f56c0acd04.gif" />
+    <!-- 预热页面 -->
+    <div v-if="activityStatus === 0" class="preheat-page">
+      <img v-for="(item, index) in preheatImgList" :src="item" :key="index" />
+      <img @click="clickPreHeat" class="bottom-btn"
+        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210311/291e3736c3e549d296ec930b1b4de17f.png" />
+    </div>
+    <div v-else class="content">
+      <!-- 规则及订单按钮 -->
+      <div class="order-btn" @click="clickOrderBtn"></div>
+      <div onClick="openRules()" class="rule-btn"></div>
+      <img v-if="canUsedNum > 0" class="index-bg"
+        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/b17459f3f3604fd8acc417005552beff.jpg" />
+      <img v-else class="index-bg"
+        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/adc9e53b4f544a0a8702bacd35315140.jpg" />
+      <img v-for="(item, index) in indexImgList" :src="item" :key="index" />
+      <!-- 底部按钮 -->
+      <div class="bottm-btn-wrap">
+        <img v-if="activityStatus === 2" class="bottom-btn"
+          src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210311/2aa69e23c39a4242877373e07aab561a.png" />
+        <!-- <img v-if="activityStatus === 0" class="bottom-btn" @click="clickPreHeat"
+          src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/246f542d096b40b5a67a2df4066957ca.png" /> -->
+        <img v-if="activityStatus === 1" class="bottom-btn" @click="clickOpenBtn"
+          src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210311/3ca5fe5567874dfab77bd67ad863849a.gif" />
+      </div>
+    </div>
   </div>
   <!-- 规则弹窗 -->
   <div id="rules-container" class="rules-container" style="display: none;">
@@ -73,10 +78,10 @@
       <p class="rules-title">活动规则</p>
       <div id="rules-item-wrap" class="rules-item-wrap">
         <p class="rules-item">
-          1、活动时间：2021.2.26-2021.2.28
+          1、活动时间：2021.3.14-2021.3.16
         </p>
         <p class="rules-item">
-          2、宝宝巴士的用户在活动期间购买【儿歌畅享VIP】的一年会员，可免费获赠“会唱歌的数字AR互动有声书”1台，限量150份先到先得；
+          2、宝宝巴士的用户于活动期间在ipad购买【儿歌畅享VIP】的一年会员，可免费获赠“会唱歌的数字AR互动有声书”1台，限量200份先到先得；
         </p>
         <p class="rules-item" style="color: orange">
           3、同一用户可多次购买本活动套餐，儿歌畅享VIP有效期累加生效；
@@ -130,7 +135,17 @@
         },
       },
       showTimer: null,
-      preHeatText: "2月26日-2月28日开抢！",
+      preHeatText: "3月14日-3月16日开抢！",
+      indexImgList: [ // 活动页图片列表
+        'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/063e3b7e35934f37b9ba8c09092900d3.jpg',
+        'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/50e969535e99446b957b494bdc8a4a8a.jpg',
+        'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/9d9e1beb85b8488b989842aeb6b42964.jpg',
+      ],
+      preheatImgList: [ // 页图片列表
+        'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210312/98105dc5010b4d4986d067bb24921dbd.jpg',
+        'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/698b061a22d84208b10c0c270f0aaf41.jpg',
+        'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/1a286ccbd1d64fc5b439ac38161c68f8.jpg',
+      ],
     },
 
     methods: {
@@ -332,7 +347,7 @@
   function jumpToOrderList() {
     var url =
       window.location.origin +
-      "/appactivity/ModulePageApp?pageid=06e9200a16174a839894ba9f5b8cd52c&aid=" + aid;
+      "/appactivity/ModulePageApp?pageid=d09568e87ac4465daf07c10b03142cbd&aid=" + aid;
     window.location.href =
       "?Client=Target&Type=Inner&Url=" + encodeURIComponent(url) + "&Title=订单列表&IsHeader=1&IsNewWindow=1";
   }

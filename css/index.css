@@ -3,9 +3,16 @@
    padding: 0;
  }
 
+ .body {
+   position: fixed;
+   top: 0;
+   left: 50%;
+   transform: translateX(-50%);
+ }
+
  img {
    display: block;
-   max-width: 100%;
+   width: 100%;
    /*IE10*/
    user-select: none;
 
@@ -24,55 +31,52 @@
    -ms-user-select: none;
  }
 
- .hidden {
-   display: none !important;
- }
-
  .container {
    position: relative;
    width: 7.5rem;
-   padding-bottom: 1.88rem;
    margin: 0 auto;
-   background-color: #ff7a29;
  }
 
- .container>img {
-   width: 100%;
-   display: block;
+ /* 主页面 */
+ .content {
+   position: relative;
+   background-color: #73D335;
+   padding-bottom: 1.58rem;
  }
 
- .body {
+ .content .bottm-btn-wrap {
    position: fixed;
-   top: 0;
-   left: 50%;
-   transform: translateX(-50%);
+   bottom: 0;
  }
 
  .bottom-btn {
-   position: fixed;
-   height: 1.88rem;
-   width: 7.5rem !important;
-   bottom: 0;
-   left: 50%;
-   transform: translateX(-50%)
+   height: 1.58rem;
+   width: 7.5rem;
  }
 
  .order-btn {
    position: absolute;
-   right: 1.32rem;
-   top: .14rem;
-   width: 0.9rem;
-   height: 1.2rem;
+   right: 0;
+   top: 1.42rem;
+   width: 1.61rem;
+   height: 0.67rem;
+ }
+
+ /* 预热页面 */
+
+ .preheat-page {
+   position: relative;
+   background-color: #73D335;
  }
 
  /* 规则弹窗 */
 
  .rule-btn {
    position: absolute;
-   right: .2rem;
-   top: 0.37rem;
-   width: .9rem;
-   height: 1.2rem;
+   right: 0;
+   top: 0.45rem;
+   width: 1.61rem;
+   height: 0.67rem;
  }
 
  .rules-container {

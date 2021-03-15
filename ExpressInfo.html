@@ -32,13 +32,13 @@
   <div @touchmove.prevent class="shadow" onClick="closeSuccessPop()">
     <div class="pop-wrap">
       <img class="pop"
-        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/d383f18bf6c4406db8329b36d93b3e17.png" />
-      <div class="pop-btn" onClick="closeSuccessPop(this)"></div>
+        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/c1b4ebb695714d86897c97beccefd7e0.png" />
+      <div class="pop-btn"></div>
     </div>
   </div>
   <div class="container" style="visibility: hidden;">
     <img class="address-bg" onClick="preventClick"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/6809da7877574e298425f18c9f80fd55.png" />
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/737aab3c57d84d14be5e0855e0d0d930.jpg" />
     <div class="content-wrap">
       <div class="content-item">
         收货人：<input class="input" id="name" placeholder="请输入2-10个中文汉字" maxlength="10" />
@@ -54,10 +54,10 @@
       </div>
       <div class="tip-wrap">(宝宝巴士将在您提交收件信息后7个工作日内发出礼品)</div>
     </div>
+    <img class="bottom-btn" id="submit"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210311/40bacb3b768941c3889a953e0e74e3c2.png" />
   </div>
 
-  <img class="bottom-btn" id="submit"
-    src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/5cb084a5693d41a78e65ec8a1ddc40b1.png" />
   <script>
     var _czc = _czc || [];
     _czc.push(["_setAccount", "1279349239"]);
@@ -95,51 +95,6 @@
         clearTimeout(timer)
         document.body.removeChild(toastWrap);
       }, duration)
-    }
-
-    $('input').on('blur', function () {
-      console.log('input blur');
-      $('#submit').removeClass("hidden");
-      setTimeout(function () {
-        var scrollHeight = document.documentElement.scrollTop || document.body.scrollTop || 0;
-        window.scrollTo(0, Math.max(scrollHeight - 1, 0));
-      }, 100);
-    });
-    $('textarea').on('blur', function () {
-      console.log('textarea blur');
-      $('#submit').removeClass("hidden");
-      setTimeout(function () {
-        var scrollHeight = document.documentElement.scrollTop || document.body.scrollTop || 0;
-        window.scrollTo(0, Math.max(scrollHeight - 1, 0));
-      }, 100);
-    });
-    $('input').on('focus', function () {
-      console.log('input focus');
-      $('#submit').addClass("hidden");
-    });
-    $('textarea').on('focus', function () {
-      console.log('textarea focus');
-      $('#submit').addClass("hidden");
-    });
-
-    // 解决安卓下，键盘弹出后，绝对定位元素不往上顶问题
-    var isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
-    var originHeight = document.documentElement.clientHeight || document.body.clientHeight;
-
-    function resizeHandler() {
-      var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
-      var activeElement = document.activeElement;
-      if (resizeHeight < originHeight) {
-        console.log('键盘弹起后逻辑');
-        // 键盘弹起后逻辑
-      } else {
-        console.log('键盘收起后逻辑');
-        // 键盘收起后逻辑
-        $('#submit').removeClass("hidden");
-      }
-    };
-    if (isAndroid) {
-      window.addEventListener('resize', resizeHandler);
     }
 
     //校验手机号
@@ -238,10 +193,10 @@
           if (res.ResultCode === "0") {
             try {
               _czc.push(["_trackEvent", "收件信息提交", "成功"])
+              localStorage.setItem('toFresh', 'true');
             } catch (error) {
               console.log(error)
             }
-            localStorage.setItem('toFresh', 'true')
             showSuccessPop();
           } else {
             try {

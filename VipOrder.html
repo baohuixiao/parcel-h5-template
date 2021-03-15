@@ -93,7 +93,7 @@
             </div>
             <div class="refresh-btn-wrap" @click="clickReLoad">
                 <img
-                    src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210222/52353862328c48bc8f42b56c4db560f6.png" />
+                    src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/3f0322f196ac4cb798bea8684b32e878.png" />
             </div>
         </div>
         <div id="empty" class="empty" v-else>
@@ -155,7 +155,7 @@
                         console.log(error)
                     }
                     var url = window.location.origin +
-                        '/appactivity/ModulePageApp?pageid=fd30e35935844415b668778084f7c49f&aid=' +
+                        '/appactivity/ModulePageApp?pageid=89892479c0864fb4ba7c2028b63eb8da&aid=' +
                         this.aid + '&OrderNo=' +
                         orderNo;
                     window.location.href = '?Client=Target&Type=Inner&Url=' + encodeURIComponent(url) +
@@ -212,14 +212,17 @@
                 var onVisibilityChange = function () {
                     if (!document[hiddenProperty]) {
                         console.log('我出现了');
-                        var result = localStorage.getItem('toFresh');
-                        localStorage.removeItem('toFresh');
-                        if (result !== null && result === 'true') {
-                            that.clickReLoad();
+                        try {
+                            var result = localStorage.getItem('toFresh');
+                            localStorage.removeItem('toFresh');
+                            if (result !== null && result === 'true') {
+                                that.clickReLoad();
+                            }
+                        } catch (error) {
+                            console.log(error)
                         }
                     } else {
                         console.log('我隐藏了');
-                        localStorage.removeItem('toFresh');
                     }
                 }
                 document.addEventListener(visibilityChangeEvent, onVisibilityChange)

@@ -70,7 +70,7 @@ html {
   width: 100%;
   height: 1.1rem;
   border-radius: 0.2rem;
-  background-color: #FFDAB5;
+  background-color: #E3F7FF;
   border: 1px solid #DDDDDD;
   font-size: 0.32rem;
   font-weight: 500;
@@ -144,7 +144,7 @@ html {
   width: 6.7rem;
   height: 0.8rem;
   border-radius: 0.39rem;
-  background: #FF6925;
+  background: #00AEFF;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -197,8 +197,8 @@ html {
 
 .refresh-btn-wrap {
   position: fixed;
-  bottom: 4rem;
-  right: 0.42rem;
+  bottom: 1.88rem;
+  right: 0.64rem;
   width: 1.18rem;
-  height: 1.34rem;
+  /* height: 1.34rem; */
 }

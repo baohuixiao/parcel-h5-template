@@ -115,8 +115,9 @@
 <script>
   // 友盟埋点
   var _czc = _czc || [];
-  var aid = '';
   _czc.push(["_setAccount", "1279349239"]);
+  
+  var aid = '';
   aid = getQueryString("aid");
 
   var app = new Vue({
@@ -126,14 +127,6 @@
       pageShow: false,
       activityStatus: 0, // 0: 预热状态 1：开始状态  2：结束状态
       canUsedNum, // 周边数量
-      preClickProcessor: {
-        orderClick() {
-          jumpToOrderList();
-        },
-        buyClick() {
-          handlePayment();
-        },
-      },
       showTimer: null,
       preHeatText: "3月14日-3月16日开抢！",
       indexImgList: [ // 活动页图片列表
@@ -205,16 +198,13 @@
       // 检查上一次的操作情况
       checkPreOperation: function () {
         var result = sessionStorage.getItem("preClick");
-        if (result !== null) {
-          try {
-            if (accountID > 0) {
-              this.preClickProcessor[result]();
-            }
-          } catch (err) {
-            console.log(err);
-          }
-          sessionStorage.removeItem("preClick");
+        if (result === 'orderClick') {
+          jumpToOrderList();
         }
+        if (result === 'buyClick') {
+          handlePayment();
+        }
+        sessionStorage.removeItem("preClick");
       },
 
       addPageShowListener: function () {

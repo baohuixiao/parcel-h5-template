@@ -37,7 +37,7 @@ img {
   width: 7.5rem;
   margin: 0 auto;
   min-height: 100vh;
-  background-color: #73D335;
+  background-color: #FFF3E3;
 }
 
 .address-bg {
@@ -65,7 +65,7 @@ img {
 .bottom-btn {
   position: absolute;
   bottom: 0;
-  height: 1.58rem;
+  height: 1.53rem;
 }
 
 .input {
@@ -131,11 +131,8 @@ textarea::-webkit-input-placeholder {
 
 .pop-wrap {
   width: 84.93%;
-  /* height: 7.02rem; */
   position: absolute;
   left: 50%;
-  /* right: 0; */
-  /* margin: 0 auto; */
   top: 50%;
   transform: translate(-50%, -60%);
 }
@@ -145,10 +142,130 @@ textarea::-webkit-input-placeholder {
   height: 7.02rem; */
 }
 
-.pop-btn {
-  width: 6.57rem;
-  height: 1rem;
+.pop-content {
+  width: 90%;
   position: absolute;
-  bottom: 0rem;
-  left: 0rem;
+  top: 3.9rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.33rem;
+}
+
+.pop-content span {
+  color: #FFB64E;
+}
+
+/* 挑选礼物样式 */
+
+.gift-list {
+  width: 7.02rem;
+  height: 2.62rem;
+  position: absolute;
+  top: 3rem;
+  left: 0.24rem;
+  display: flex;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 0.5rem;
+}
+
+.gift-list::-webkit-scrollbar {
+  display: none;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.gift-item {
+  background-color: #FFEDD7;
+  min-width: 2.35rem;
+  height: 2.62rem;
+  position: relative;
+  border-radius: 0.3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.active-item {
+  background-color: #FFC600;
+}
+
+.gift-item-multiple {
+  margin-right: 0.24rem;
+}
+
+.gift-item-multiple:first-child {
+  margin-left: 0.4rem;
+}
+
+.gift-item-multiple:last-child {
+  margin-right: 0;
+}
+
+.gitf-item-padding {
+  height: 100%;
+  min-width: 0.001rem;
+}
+
+.title-wrap {
+  width: 2.35rem;
+  height: 1.04rem;
+  border-radius: 0.3rem;
+  background-color: #FFDCA6;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: 0.28rem;
+  text-align: center;
+  padding-top: 0.5rem;
+  box-sizing: border-box;
+  color: #532900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.active-item .title-wrap {
+  background-color: #FFA800;
+  color: #fff;
+}
+
+.gift-icon {
+  position: absolute;
+  width: 1.93rem;
+  height: 1.93rem;
+  margin-top: 0.16rem;
+}
+
+.gift-cover {
+  position: absolute;
+  top: 1.91rem;
+  width: 4.52rem !important;
+  height: 4.52rem !important;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gift-tip {
+  background-color: #FFC700;
+  border-radius: 0.27rem;
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 6.5rem;
+  transform: translateX(-50%);
+  font-size: 0.28rem;
+  padding: 0.14rem 0.2rem;
+  white-space: nowrap;
+  max-width: 5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.check-icon {
+  position: absolute;
+  width: 0.7rem;
+  top: -0.2rem;
+  left: -0.2rem;
 }

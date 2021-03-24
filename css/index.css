@@ -35,38 +35,75 @@
    position: relative;
    width: 7.5rem;
    margin: 0 auto;
+   background-color: #fff3e3;
+   min-height: 100vh;
+ }
+
+ .header {
+   width: 100%;
+   height: 4.32rem;
+   position: relative;
+   margin-bottom: 0.54rem;
+ }
+
+ .header .tab-wrap {
+   width: 100%;
+   height: 2.28rem;
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   display: flex;
+   align-items: center;
+   justify-content: space-around;
+ }
+
+ .header .tab-item {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+
+ .header .tab-active {
+   width: 3.67rem;
+   height: 2.28rem;
+ }
+
+ .header .tab-unactive {
+   width: 2.94rem;
+   height: 1.83rem;
  }
 
  /* 主页面 */
  .content {
    position: relative;
-   background-color: #73D335;
-   padding-bottom: 1.58rem;
+   background-color: #fff3e3;
+   padding-bottom: 1.53rem;
  }
 
- .content .bottm-btn-wrap {
+ .bottm-btn-wrap {
    position: fixed;
    bottom: 0;
  }
 
  .bottom-btn {
-   height: 1.58rem;
+   height: 1.53rem;
    width: 7.5rem;
  }
 
  .order-btn {
    position: absolute;
    right: 0;
-   top: 1.42rem;
-   width: 1.61rem;
-   height: 0.67rem;
+   top: 0.15rem;
+   width: 1.40rem;
+   height: 0.51rem;
  }
 
  /* 预热页面 */
 
  .preheat-page {
    position: relative;
-   background-color: #73D335;
+   background-color: #fff3e3;
+   padding-bottom: 1.53rem;
  }
 
  /* 规则弹窗 */
@@ -74,9 +111,9 @@
  .rule-btn {
    position: absolute;
    right: 0;
-   top: 0.45rem;
-   width: 1.61rem;
-   height: 0.67rem;
+   top: 0.9rem;
+   width: 1.40rem;
+   height: 0.51rem;
  }
 
  .rules-container {
@@ -140,4 +177,269 @@
    position: absolute;
    right: .42rem;
    top: .33rem
+ }
+
+ .choose-gift {
+   background-color: #fff;
+   width: 6.95rem;
+   box-shadow: 0px 1px 8px 0px rgba(255, 144, 0, 0.42);
+   border-radius: 0.3rem;
+   margin: 0 auto;
+   margin-bottom: 0.65rem;
+   padding: 0.93rem 0 0.31rem 0;
+   position: relative;
+ }
+
+ .choose-gift-decorator {
+   position: absolute;
+   top: -0.26rem;
+   left: -0.09rem;
+   width: 1.97rem;
+   height: 0.87rem;
+ }
+
+ .choose-gift-title {
+   width: 3.94rem;
+   height: 0.77rem;
+   position: absolute;
+   top: -0.2rem;
+   left: 2.11rem;
+ }
+
+ .choose-gift .gift-item {
+   width: 6.48rem;
+   height: 2.8rem;
+   background-color: #FFEDD7;
+   border-radius: 0.3rem;
+   margin: 0 auto;
+   margin-bottom: 0.27rem;
+   position: relative;
+   display: flex;
+   align-items: center;
+ }
+
+ .choose-gift .checked-bg {
+   width: 6.48rem;
+   height: 2.8rem;
+   border-radius: 0.3rem;
+ }
+
+ .choose-gift .gift-item:last-child {
+   margin-bottom: 0;
+ }
+
+ .choose-gift .gift-item-gray {
+   background-color: #F4F4F4;
+ }
+
+ .choose-gift .item-content {
+   width: 100%;
+   height: 2.42rem;
+   position: absolute;
+   display: flex;
+   align-items: center;
+ }
+
+ .choose-gift .icon {
+   width: 2.42rem;
+   height: 2.42rem;
+   margin-right: 0.1rem;
+   margin-left: 0.12rem;
+ }
+
+ .choose-gift .text-wrap {
+   height: 100%;
+   width: 3.69rem;
+   color: #66340B;
+ }
+
+ .choose-gift .active-text-wrap {
+   color: #fff;
+ }
+
+ .choose-gift .gift-item-gray .text-wrap {
+   color: #D2D0D0;
+ }
+
+ .choose-gift .text-title {
+   font-size: 0.4rem;
+   margin-top: 0.37rem;
+   font-weight: bold;
+ }
+
+ .choose-gift .text-description {
+   font-size: 0.25rem;
+   margin-top: 0.3rem;
+ }
+
+ .choose-gift .text-price {
+   font-size: 0.29rem;
+   margin-top: 0.2rem;
+   display: flex;
+   align-items: center;
+ }
+
+ .choose-gift .price {
+   font-size: 0.46rem;
+   margin-left: 0.16rem;
+   font-weight: bold;
+   line-height: 1;
+ }
+
+ .choose-gift .price-icon {
+   background-color: #FFA94D;
+   border-radius: 0.2rem;
+   width: 1.16rem;
+   height: 0.45rem;
+   font-size: 0.29rem;
+   margin-left: 0.16rem;
+   color: #fff;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+
+ .choose-gift .active-text-wrap .price-icon {
+   background-color: #FF8400;
+ }
+
+ .choose-gift .gift-item-gray .price-icon {
+   background-color: #D2D0D0;
+ }
+
+ .choose-gift .over-icon {
+   width: 1.06rem;
+   height: 1.06rem;
+   right: -0.11rem;
+   top: -0.11rem;
+   position: absolute;
+ }
+
+ .choose-gift .check-icon {
+   width: 0.71rem;
+   height: 0.7rem;
+   position: absolute;
+   top: -0.2rem;
+   right: -0.15rem;
+ }
+
+ .gift-detail {
+   padding-top: 0.6rem;
+ }
+
+ .gift-detail .list-gift-wrap {
+   display: flex;
+   margin-top: 0.18rem;
+   margin-bottom: 0.3rem;
+   overflow-x: scroll;
+   padding-top: 0.24rem;
+   padding-bottom: 0.2rem;
+   -webkit-overflow-scrolling: touch;
+ }
+
+ .gift-detail .list-gift-wrap::-webkit-scrollbar {
+   display: none;
+ }
+
+ .gift-detail .list-gift-item {
+   min-width: 2rem;
+   height: 1.96rem;
+   background-color: #fff;
+   border-radius: 0.3rem;
+   display: flex;
+   /* justify-content: center; */
+   align-items: center;
+   flex-direction: column;
+   position: relative;
+   font-size: 0.22rem;
+   color: #66340B;
+ }
+
+ .gift-detail .list-gift-item .title {
+   position: relative;
+   bottom: 0.15rem;
+   text-align: center;
+ }
+
+ .gift-detail .detail-item-active {
+   background-color: #FFC53A;
+   min-width: 2.16rem;
+   font-size: 0.23rem;
+   color: #fff;
+ }
+
+ .gift-detail .detail-item-active .icon-wrap {
+   width: 1.69rem;
+   height: 1.69rem;
+   border-color: #FF9C00;
+ }
+
+ .gift-detail .detail-item-active::after {
+   content: '';
+   position: absolute;
+   width: 0;
+   height: 0;
+   z-index: 6;
+   border-width: 0.2rem 0.2rem 0;
+   border-style: solid;
+   border-color: #FFC53A transparent transparent;
+   bottom: -0.18rem;
+   left: 50%;
+   transform: translateX(-50%);
+ }
+
+ .gift-detail .icon-wrap {
+   display: flex;
+   width: 1.56rem;
+   justify-content: center;
+   height: 1.56rem;
+   position: relative;
+   overflow: hidden;
+   border-radius: 0.2rem;
+   border: 0.08rem solid #FFE1BE;
+   top: -0.24rem;
+ }
+
+ .gift-detail .icon {
+   width: 1.40rem;
+   height: 1.40rem;
+   position: absolute;
+ }
+
+ .gift-detail .icon-bottom {
+   width: 1.56rem;
+   height: 0.75rem;
+   border-top-left-radius: 0.2rem;
+   background-color: red;
+   border-top-right-radius: 0.2rem;
+   position: absolute;
+   bottom: 0;
+ }
+
+ .ellipsis {
+   width: 100%;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+ }
+
+ .space-around {
+   justify-content: space-around;
+ }
+
+ .gift-item-multiple {
+   margin-right: 0.38rem;
+ }
+
+ .gift-item-multiple:first-child {
+   margin-left: 0.28rem;
+ }
+
+ .gift-item-multiple:last-child {
+   margin-right: 0;
+ }
+
+ .gitf-item-padding {
+   height: 0.01rem;
+   min-width: 0.001rem;
  }

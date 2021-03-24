@@ -17,6 +17,48 @@
       var windowWidth = html.clientWidth > 600 ? 600 : html.clientWidth;
       html.style.fontSize = windowWidth / 7.5 + 'px';
     }());
+
+    var localGiftData = {
+      "001": {
+        name: 'JOJO的小火车',
+        description: '职业拼图套装，开启职业认知',
+        price: 58,
+        icon: 'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/299cd63075c045eaba7e2df6b695d00d.png',
+        imgList: [
+          'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/3cf813d66dad4dceb09589feac9e93cf.png',
+          'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/273399a239d441b393d2e2566d4316f6.png',
+          'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/aa8226100974451992524e4360b43af9.png'
+        ],
+        iconBgColor: '#d3efff',
+        iconBottomColor: '#95d8ff',
+      },
+      "002": {
+        name: '恐龙积木',
+        description: '学习恐龙百科，促进脑部开发',
+        price: 49,
+        icon: 'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/5d9f7bb35ef7424e97ef749a2c5ad486.png',
+        imgList: [
+          'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/2e2faa9c621847dd93a107c2a2c60ac8.png',
+          'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/97611bc7877a4a9a8168f33f4e36f082.png'
+        ],
+        iconBgColor: '#ffddde',
+        iconBottomColor: '#ffc4ca',
+      },
+      "003": {
+        name: '奇妙古诗词',
+        description: '60首古诗词，国学经典启蒙',
+        price: 49,
+        icon: 'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/34a130cf261e405fbff03c7e75b911eb.png',
+        imgList: [
+          'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/0d0da0404d2b4d1099406663e8b2041c.png',
+          'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/1d31571c3ee741edb718d1c2a174ca05.png',
+          'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/aa46009d1a434e3d829fe2b25797b4c7.png'
+        ],
+        iconBgColor: '#efdef8',
+        iconBottomColor: '#e1c4fa',
+      },
+    };
+
     var vConsole = new VConsole();
   </script>
 
@@ -32,13 +74,30 @@
   <div @touchmove.prevent class="shadow" onClick="closeSuccessPop()">
     <div class="pop-wrap">
       <img class="pop"
-        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/c1b4ebb695714d86897c97beccefd7e0.png" />
-      <div class="pop-btn"></div>
+        src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/d36725f8be6f4f2681024f820a9a6f93.png" />
+      <div class="pop-content">收件信息提交成功,赠送的<span id="giftName"></span>将在7个工作日内发出，请您耐心等待~</div>
     </div>
   </div>
-  <div class="container" style="visibility: hidden;">
-    <img class="address-bg" onClick="preventClick"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/737aab3c57d84d14be5e0855e0d0d930.jpg" />
+  <div id="app" class="container" v-show="pageShow">
+    <img v-if="hasGift" class="address-bg"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/fb700fe73b0a40d1a763623eca39c18f.png" />
+    <img class="gift-cover" v-if="hasGift" :src="giftCover" />
+    <div class="gift-tip" v-if="hasGift">你有待领取的{{giftName}}</div>
+    <img v-if="!hasGift" class="address-bg"
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/c83a15c9585a466589e4f6c17d6182c5.png" />
+    <div v-if="!hasGift" class="gift-list" :class="{'space-around': giftList.length === 2}">
+      <div class="gift-item"
+        v-bind:class="{'gift-item-multiple': giftList.length > 2, 'active-item': index === giftSelectedIndex}"
+        v-for="(giftItem, index) in giftList" @click="handleGiftClick(index)">
+        <div class="title-wrap">{{giftItem.name}}</div>
+        <img class="gift-icon" :src="giftItem.icon" />
+        <img v-show="index !== giftSelectedIndex" class="check-icon"
+          src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210319/6d8fcdb9e9954cfbafcadc4427b0f885.png" />
+        <img v-show="index === giftSelectedIndex" class="check-icon"
+          src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210319/5dbbafa922a44027a877da593e563980.png" />
+      </div>
+      <div class="gitf-item-padding" v-if="giftList.length > 2"></div>
+    </div>
     <div class="content-wrap">
       <div class="content-item">
         收货人：<input class="input" id="name" placeholder="请输入2-10个中文汉字" maxlength="10" />
@@ -55,16 +114,25 @@
       <div class="tip-wrap">(宝宝巴士将在您提交收件信息后7个工作日内发出礼品)</div>
     </div>
     <img class="bottom-btn" id="submit"
-      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210311/40bacb3b768941c3889a953e0e74e3c2.png" />
+      src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210319/e463ff34090a4da29b9dd4eb4f33a89e.png" />
   </div>
 
+  <!-- 服务端vue -->
+  <!-- <script src="https://actcdn.babybus.com/lib/vue/vue.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
+    // 埋点
     var _czc = _czc || [];
     _czc.push(["_setAccount", "1279349239"]);
+
     var OrderNo = getQueryString('OrderNo');
     var aid = getQueryString('aid');
+    var awardCode = getQueryString('awardCode');
+    var packageID = getQueryString('packageID');
+
     if (document.documentElement.clientHeight < document.documentElement.clientWidth) {
-      document.querySelector(".pop-wrap").style.width = '50%';
+      // document.querySelector(".pop-wrap").style.width = '50%';
+      document.querySelector(".pop-wrap").style.transform = 'translate(-50%, -60%) scale(0.6)'
     }
 
     //获取页面传参
@@ -75,27 +143,129 @@
       return null;
     }
 
-    var toastFlag = true;
+    var app = new Vue({
+      el: '#app',
+      data: {
+        pageShow: false,
+        giftList: [],
+        giftSelectedIndex: 0,
+        hasGift: false,
+        giftCover: '',
+        giftName: '',
+      },
 
-    // toast控件封装
-    function showToast(text, duration) {
-      if (!(text.trim()) || !toastFlag) {
-        return;
+      methods: {
+        handleGiftClick: function (index) {
+          if (this.giftSelectedIndex === index) return;
+          this.giftSelectedIndex = index;
+        },
+
+        getAwardList: function () {
+          return new Promise(function (resolve, reject) {
+            $.ajax({
+              url: '/AppActivity/MoreVIPPay_Index',
+              data: {
+                aid: aid,
+              },
+              method: 'GET',
+              dataType: 'json',
+              success: function (res) {
+                resolve(res);
+              },
+              fail: function (err) {
+                reject(err);
+                console.log("首页数据获取失败");
+              }
+            })
+          })
+        },
+
+        handleIndexData(packageList) {
+          for (var i = 0; i < packageList.length; i += 1) {
+            if (packageList[i].awardList && packageList[i].awardList.length > 0) {
+              for (var j = 0; j < packageList[i].awardList.length; j += 1) {
+                var tempObj = localGiftData.hasOwnProperty(packageList[i].awardList[j].awardCode) ?
+                  localGiftData[packageList[i].awardList[j].awardCode] : null;
+                if (tempObj) {
+                  tempObj.num = packageList[i].awardList[j].num;
+                  tempObj.awardCode = packageList[i].awardList[j].awardCode;
+                  tempObj.awardID = packageList[i].awardList[j].awardID;
+                }
+                packageList[i].awardList[j] = tempObj;
+              }
+            }
+          }
+          return packageList;
+        },
+
+        findAwardList(list, packageID) {
+          for (var i = 0; i < list.length; i += 1) {
+            if (list[i].iPackageID === Number(packageID) || list[i].aPackageID === Number(packageID)) {
+              if (list[i].awardList.length > 0) {
+                var newList = list[i].awardList.filter(function (item) {
+                  return item.num > 0;
+                })
+                return newList;
+              }
+            }
+          }
+        }
+      },
+
+      created: function () {
+        if (awardCode === '0') {
+          var that = this;
+          console.log('需要选择礼物')
+          this.getAwardList().then(function (res) {
+            console.log(res);
+            if (res.resultCode === "0") {
+              var packageList = res.data.packageList;
+              if (packageList.length > 0) {
+                that.packageList = that.handleIndexData(packageList);
+                that.giftList = that.findAwardList(that.packageList, packageID);
+                console.log(that.findAwardList(that.packageList, packageID))
+              }
+            }
+          });
+        } else {
+          this.hasGift = true;
+          this.giftCover = localGiftData[awardCode].icon;
+          this.giftName = localGiftData[awardCode].name;
+        }
+      },
+
+      mounted: function () {
+        this.pageShow = true;
       }
-      var timer = null;
-      toastFlag = false;
+    })
 
-      var toastWrap = document.createElement('div');
-      toastWrap.style.cssText =
-        'position: fixed; font-size: 0.32rem; color: #fff; z-index: 5; max-width: 5rem;text-align: center;top:40%;padding: 0.1rem 0.3rem;border-radius: 0.5rem;background-color: rgba(0, 0, 0, 0.7);display: flex;left:50%;transform: translateX(-50%);';
-      toastWrap.innerText = text;
-      document.body.appendChild(toastWrap);
-      timer = setTimeout(function () {
-        toastFlag = true;
-        clearTimeout(timer)
-        document.body.removeChild(toastWrap);
-      }, duration)
-    }
+    // toast组件封装
+    var showToast = (function () {
+      var div;
+      var toastFlag = true;
+      var timer = null;
+      return function (text, time) {
+        if (!text.trim() || !toastFlag) {
+          return;
+        }
+        var duration = time ? time : 2000;
+        toastFlag = false;
+        timer = null;
+        if (!div) {
+          div = document.createElement("div");
+          div.style.cssText =
+            "position: fixed; display: none; font-size: 0.32rem; color: #fff; z-index: 5; max-width: 5rem; min-width: 4rem;text-align:center;top: 40%;padding: 0.1rem 0.3rem;border-radius: 0.5rem;background-color: rgba(0, 0, 0, 0.7);left:50%;transform: translateX(-50%);";
+          document.body.appendChild(div);
+        }
+        div.innerText = text;
+        div.style.display = 'block'
+        timer = setTimeout(function () {
+          toastFlag = true;
+          clearTimeout(timer);
+          div.style.display = 'none'
+        }, duration)
+      }
+    }())
 
     //校验手机号
     function isPoneAvailable(phone) {
@@ -109,6 +279,7 @@
 
     oBtn = document.getElementById('submit');
 
+    // 防抖函数
     function debounce(fn, time, triggleNow) {
       var t = null;
 
@@ -154,7 +325,7 @@
         if (navigator.onLine) {
           postData(phone, name, address)
         } else {
-          showToast('网络未连接，请检查网络设置', 2000);
+          showToast('网络未连接，请检查网络设置');
         }
       } else {
         if (name.length < 2) {
@@ -164,7 +335,7 @@
         } else if (!isPoneAvailable(phone)) {
           tip = '请输入正确的手机号';
         }
-        showToast(tip, 2000);
+        showToast(tip);
       }
     }
 
@@ -175,13 +346,14 @@
         console.log(error)
       }
       $.ajax({
-        url: '/AppActivity/VipGift_SetExpressInfo',
+        url: '/AppActivity/MoreVIPPay_SetExpressInfo',
         data: {
           phone: phoneNumber,
           orderNo: OrderNo,
           userName: userName,
           address: address,
           aid: aid,
+          awardCode: awardCode === '0' ? app.giftList[app.giftSelectedIndex].awardCode : null,
         },
         method: 'POST',
         dataType: 'json',
@@ -190,30 +362,19 @@
         },
         success: function (res) {
           console.log("发送成功")
-          if (res.ResultCode === "0") {
-            try {
-              _czc.push(["_trackEvent", "收件信息提交", "成功"])
-              localStorage.setItem('toFresh', 'true');
-            } catch (error) {
-              console.log(error)
-            }
+          if (res.resultCode === "0") {
+            _czc.push(["_trackEvent", "收件信息提交", "成功"])
+            localStorage.setItem('toFresh', 'true');
+            document.getElementById('giftName').innerText = app.giftName ? app.giftName : app.giftList[app.giftSelectedIndex].name;
             showSuccessPop();
           } else {
-            try {
-              _czc.push(["_trackEvent", "收件信息提交", "失败"])
-            } catch (error) {
-              console.log(error)
-            }
-            showToast(res.ResultMessage, 2000);
+            _czc.push(["_trackEvent", "收件信息提交", "失败"])
+            showToast(res.resultMessage);
           }
         },
         fail: function (err) {
-          try {
-            _czc.push(["_trackEvent", "收件信息提交失败", ""])
-          } catch (error) {
-            console.log(error)
-          }
-          showToast('发送失败,请稍后重试', 2000);
+          _czc.push(["_trackEvent", "收件信息提交失败", ""])
+          showToast('发送失败,请稍后重试');
           console.log("发送失败")
         }
       })
@@ -256,15 +417,6 @@
     function handle(event) {
       event.preventDefault();
     }
-
-    //禁止图片点击
-    function preventClick(e) {
-      e.stopPropagation()
-      e.preventDefault()
-      return false;
-    }
-
-    $(".container").css('visibility', 'visible');
   </script>
 </body>
 

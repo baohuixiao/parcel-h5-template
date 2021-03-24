@@ -12,7 +12,6 @@
     <script src="https://act.development.platform.babybus.com/lib/tool/vconsole.min.js"></script>
     <script>
         // 服务端数据
-        var canUsedNum = 10; //当前公仔数量
         var orderList = [{
                 "ProductName": "tcyO4hhevW",
                 "OrderName": "wrHoRvQOE7",
@@ -43,6 +42,46 @@
         var exChangeEndTime = 1612336509049; //兑换截止时间
         var serverTime = 1612419866; //系统当前时间 毫秒
 
+        var localGiftData = {
+            "001": {
+                name: 'JOJO的小火车',
+                description: '职业拼图套装，开启职业认知',
+                price: 58,
+                icon: 'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/299cd63075c045eaba7e2df6b695d00d.png',
+                imgList: [
+                    'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/3cf813d66dad4dceb09589feac9e93cf.png',
+                    'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/273399a239d441b393d2e2566d4316f6.png',
+                    'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/aa8226100974451992524e4360b43af9.png'
+                ],
+                iconBgColor: '#d3efff',
+                iconBottomColor: '#95d8ff',
+            },
+            "002": {
+                name: '恐龙积木',
+                description: '学习恐龙百科，促进脑部开发',
+                price: 49,
+                icon: 'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/5d9f7bb35ef7424e97ef749a2c5ad486.png',
+                imgList: [
+                    'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/2e2faa9c621847dd93a107c2a2c60ac8.png',
+                    'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/97611bc7877a4a9a8168f33f4e36f082.png'
+                ],
+                iconBgColor: '#ffddde',
+                iconBottomColor: '#ffc4ca',
+            },
+            "003": {
+                name: '奇妙古诗词',
+                description: '60首古诗词，国学经典启蒙',
+                price: 49,
+                icon: 'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/34a130cf261e405fbff03c7e75b911eb.png',
+                imgList: [
+                    'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/0d0da0404d2b4d1099406663e8b2041c.png',
+                    'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/1d31571c3ee741edb718d1c2a174ca05.png',
+                    'https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210322/aa46009d1a434e3d829fe2b25797b4c7.png'
+                ],
+                iconBgColor: '#efdef8',
+                iconBottomColor: '#e1c4fa',
+            },
+        };
         // 页面适配
         (function () {
             var html = document.documentElement;
@@ -60,30 +99,25 @@
     <div style="position: absolute;width:0;height:0;overflow:hidden;">
         <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
     </div>
-    <div id="container" class="container" style="visibility: hidden;">
+    <div id="container" class="container" v-show="showPage">
         <div class="content" v-if="orderList.length > 0">
-            <div class="order-item" v-for="(orderItem, index) in orderList" :key="orderItem.OrderNo">
+            <div class="order-item" v-for="(orderItem, index) in orderList" :key="orderItem.orderNo">
                 <div class="order-item-top">
-                    <span>{{orderItem.ProductName}} - {{orderItem.OrderName}}</span>
-                    <span>¥{{orderItem.Price}}</span>
+                    <span>{{orderItem.productName}} - {{orderItem.orderName}}</span>
+                    <span>¥{{orderItem.price}}</span>
                 </div>
                 <div class="order-item-contnet">
-                    <div class="item-row" v-if="itemNameMap(name) && (value || value === 0)"
+                    <div class="item-row" v-if="itemNameMap(name, value, orderItem) && (value || value === 0)"
                         v-for="(value, name) in orderItem">
-                        <span class="item-row-title">{{itemNameMap(name)}}：</span>
-                        <span class="item-row-result">{{value}}</span>
+                        <span class="item-row-title">{{itemNameMap(name, value, orderItem)}}：</span>
+                        <span class="item-row-result">{{value | handleOrderDetail(name)}}</span>
                     </div>
-                    <div class="item-row"
-                        v-if="(orderItem.PayDate > joinEndTime || serverTime > exChangeEndTime) && orderItem.Address.length === 0">
-                        <span class="item-tip-text">活动已结束</span>
-                    </div>
-                    <div class="item-row"
-                        v-if="(orderItem.PayDate < joinEndTime || serverTime < exChangeEndTime) && orderItem.Address.length === 0 && canUsedNum <= 0">
-                        <span class="item-tip-text">礼品已被领完了，下次早点来哦~</span>
+                    <div class="item-row" v-if="handleTipText(orderItem)">
+                        <span class="item-tip-text">{{handleTipText(orderItem)}}</span>
                     </div>
                 </div>
-                <div @click="clickOrderItem(orderItem.OrderNo)" class="order-item-btn"
-                    v-if="canUsedNum > 0 && orderItem.Address.length <= 0 && orderItem.PayDate <= joinEndTime && serverTime <= exChangeEndTime">
+                <div @click="clickOrderItem(orderItem.orderNo, orderItem.awardID, orderItem.packageID)" class="order-item-btn"
+                    v-if="judgeIsExchange(orderItem)">
                     填写收件信息</div>
                 <div class="divider" v-if="index < orderList.length - 1"></div>
             </div>
@@ -93,7 +127,7 @@
             </div>
             <div class="refresh-btn-wrap" @click="clickReLoad">
                 <img
-                    src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210310/3f0322f196ac4cb798bea8684b32e878.png" />
+                    src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210323/71263d644c2247d2864a2f8488123044.png" />
             </div>
         </div>
         <div id="empty" class="empty" v-else>
@@ -117,28 +151,105 @@
         el: '.container',
 
         data: {
+            showPage: false,
             orderList: [],
+            awardList: [],
             aid: '',
             joinBeginTime,
             joinEndTime,
             exChangeEndTime,
             serverTime,
-            canUsedNum,
             itemChineseName: {
-                StartDateName: "会员生效时间",
-                EndDateName: "会员到期时间",
-                PayDateShow: "购买时间",
-                ChannelTypeName: "购买方式",
-                OrderNo: "订单编号",
-                Address: "收件信息",
+                startDateName: "会员生效时间",
+                endDateName: "会员到期时间",
+                payDate: "购买时间",
+                channelTypeName: "购买方式",
+                orderNo: "订单编号",
+                address: "收件信息",
+                exchangeDay: "礼品领取截止至",
+                awardID: "礼品名称"
+            }
+        },
+
+        filters: {
+            handleOrderDetail: function (value, name) {
+                if (name === 'awardID') {
+                    for (var i = 0; i < app.awardList.length; i += 1) {
+                        if (app.awardList[i].awardID === value) {
+                            if (localGiftData.hasOwnProperty(app.awardList[i].awardCode)) {
+                                return localGiftData[app.awardList[i].awardCode].name;
+                            }
+                        }
+                    }
+                    return '未选择';
+                }
+                if (name !== 'payDate' && name !== 'exchangeDay') return value;
+                value = Number(value);
+                var date = new Date(value * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                Y = date.getFullYear() + '-';
+                M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                D = date.getDate() + ' ';
+                h = date.getHours() + ':';
+                m = date.getMinutes() + ':';
+                s = date.getSeconds();
+                return Y + M + D + h + m + s;
             }
         },
 
         methods: {
 
-            itemNameMap: function (value) {
-                if (this.itemChineseName.hasOwnProperty(value)) {
-                    return this.itemChineseName[value]
+            // 判断是否能够对象
+            judgeIsExchange: function (orderItem) {
+                // 地址不为空
+                if (orderItem.address && orderItem.address.length > 0) {
+                    return false;
+                }
+                // 支付时间在活动结束后、当前时间超过截止兑换时间
+                if (Number(orderItem.payDate) > joinEndTime || serverTime > Number(orderItem.exchangeDay)) {
+                    return false;
+                }
+                // 有选择产品，需要判断该产品的数量
+                if (orderItem.awardID !== '0') {
+                    for (var i = 0; i < this.awardList.length; i += 1) {
+                        if (Number(orderItem.awardID) === Number(this.awardList[i].awardID)) {
+                            if (this.awardList[i].num <= 0) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            },
+
+            // 处理提醒信息
+            handleTipText: function(orderItem) {
+                if (orderItem.address && orderItem.address.length > 0) {
+                    return false;
+                }
+                if (orderItem.payDate > joinEndTime || serverTime > Number(orderItem.exchangeDay)) {
+                    return '礼品逾期未领取，下次记得领取哦~';
+                }
+                if (orderItem.payDate < joinEndTime || serverTime < Number(orderItem.exchangeDay)) {
+                    for (var i = 0; i < this.awardList.length; i += 1) {
+                        if (Number(orderItem.awardID) === Number(this.awardList[i].awardID)) {
+                            if (this.awardList[i].num <= 0) {
+                                return '礼品已被领完了，下次早点来哦~'
+                            }
+                        }
+                    }
+                }
+                return false;
+            },
+
+            itemNameMap: function (name, value, orderItem) {
+                if (this.itemChineseName.hasOwnProperty(name)) {
+                    if (name === 'exchangeDay' && (value === '0' || (orderItem.address && orderItem.address.length > 0))) {
+                        return false;
+                    }
+                    if (name === 'awardID' && orderItem.exchangeDay === '0') {
+                        return false;
+                    }
+                    return this.itemChineseName[name]
                 }
                 return false
             },
@@ -147,17 +258,21 @@
                 this.getOrderList();
             }, 500, true),
 
-            clickOrderItem: debounce(function (orderNo) {
+            clickOrderItem: debounce(function (orderNo, awardID, packageID) {
                 if (orderNo) {
-                    try {
-                        _czc.push(["_trackEvent", "填写收件信息领公仔", "点击"])
-                    } catch (error) {
-                        console.log(error)
+                    _czc.push(["_trackEvent", "填写收件信息领公仔", "点击"]);
+                    var awardCode = 0;
+                    if (Number(awardID) !== 0) {
+                        // 已选择礼物，需要返回awardCode
+                        for (var i = 0; i < this.awardList.length; i += 1) {
+                            if (Number(awardID) === Number(this.awardList[i].awardID)) {
+                                awardCode = this.awardList[i].awardCode;
+                            }
+                        }
                     }
                     var url = window.location.origin +
-                        '/appactivity/ModulePageApp?pageid=89892479c0864fb4ba7c2028b63eb8da&aid=' +
-                        this.aid + '&OrderNo=' +
-                        orderNo;
+                        '/appactivity/ModulePageApp?pageid=b4276c25a24f4da9af3327aecd62c862&aid=' +
+                        this.aid + '&OrderNo=' + orderNo + '&awardCode=' + awardCode + '&packageID=' + packageID;
                     window.location.href = '?Client=Target&Type=Inner&Url=' + encodeURIComponent(url) +
                         '&Title=收件信息&IsHeader=1&IsNewWindow=1';
                 }
@@ -166,7 +281,7 @@
             getOrderList: function () {
                 var that = this;
                 $.ajax({
-                    url: '/AppActivity/VipGift_OrderData',
+                    url: '/AppActivity/MoreVIPPay_OrderData',
                     data: {
                         aid: this.aid,
                     },
@@ -174,22 +289,18 @@
                     dataType: 'json',
                     success: function (res) {
                         console.log(res);
-                        if (res.ResultCode === "0") {
-                            that.orderList = res.Data.OrderList; //用户会员订单列表
-                            try {
-                                that.serverTime = res.Data.ActivityExtData.ServerTime;
-                                that.canUsedNum = res.Data.ActivityExtData.CanUsedNum;
-                            } catch (err) {
-                                console.log(err);
-                            }
-                            $(".container").css('visibility', 'visible');
+                        if (res.resultCode === "0") {
+                            that.orderList = res.data.orderList; //用户会员订单列表
+                            that.awardList = res.data.awardList; //用户会员订单列表
+                            that.showPage = true;
                         } else {
-                            $(".container").css('visibility', 'visible');
+                            that.showPage = true;
                         }
+                        console.log(that.orderList)
                     },
                     fail: function (err) {
                         console.log("发送失败");
-                        $(".container").css('visibility', 'visible');
+                        that.showPage = true;
                     }
                 })
             },
@@ -230,6 +341,7 @@
         },
 
         mounted: function () {
+            this.showPage = true;
             this.aid = this.getQueryString('aid');
             this.getOrderList();
             this.addPageShowListener();

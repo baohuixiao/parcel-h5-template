@@ -208,12 +208,12 @@
                 if (orderItem.address && orderItem.address.length > 0) {
                     return false;
                 }
-                // 支付时间在活动结束后、当前时间超过截止兑换时间
+                // 支付时间在活动结束后、当前时间超过截止兑换时间    无礼物的exchangeDay为0，所以会return false
                 if (Number(orderItem.payDate) > joinEndTime || serverTime > Number(orderItem.exchangeDay)) {
                     return false;
                 }
                 // 有选择产品，需要判断该产品的数量
-                if (orderItem.awardID !== '0') {
+                if (Number(orderItem.awardID) !== 0) {
                     for (var i = 0; i < this.awardList.length; i += 1) {
                         if (Number(orderItem.awardID) === Number(this.awardList[i].awardID)) {
                             if (this.awardList[i].num <= 0) {
@@ -221,6 +221,11 @@
                             }
                         }
                     }
+                } else {
+                    var newList = this.awardList.filter(function (item) {
+                        return item.num > 0;
+                    })
+                    return newList.length > 0;
                 }
                 return true;
             },
@@ -234,12 +239,20 @@
                     return '礼品逾期未领取，下次记得领取哦~';
                 }
                 if (orderItem.payDate < joinEndTime || serverTime < Number(orderItem.exchangeDay)) {
-                    for (var i = 0; i < this.awardList.length; i += 1) {
-                        if (Number(orderItem.awardID) === Number(this.awardList[i].awardID)) {
-                            if (this.awardList[i].num <= 0) {
-                                return '礼品已被领完了，下次早点来哦~'
+                    // 送礼品的订单，在结束时间内购买，未超出兑换时间，需要检查数量
+                    if (Number(orderItem.awardID) !== 0) {
+                        for (var i = 0; i < this.awardList.length; i += 1) {
+                            if (Number(orderItem.awardID) === Number(this.awardList[i].awardID)) {
+                                if (this.awardList[i].num <= 0) {
+                                    return '礼品已被领完了，下次早点来哦~'
+                                }
                             }
                         }
+                    } else {
+                        var newList = this.awardList.filter(function (item) {
+                            return item.num > 0;
+                        })
+                        return newList.length > 0 ? false : '礼品已被领完了，下次早点来哦~';
                     }
                 }
                 return false;

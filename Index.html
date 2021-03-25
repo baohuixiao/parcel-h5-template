@@ -381,9 +381,9 @@
           ) {
             _czc.push(["_trackEvent", "首页-套餐购买按钮点击", "套餐" + this.packageType]);
             if (accountID > 0) {
-              if (this.packageList[this.packageType] && this.packageList[this.packageType].awardList.length > 0) {
-                awardCode[this.packageType] = this.packageList[this.packageType].awardList[this.checkedIndex].awardCode;
-              }
+              // if (this.packageList[this.packageType] && this.packageList[this.packageType].awardList.length > 0) {
+              //   awardCode[this.packageType] = this.packageList[this.packageType].awardList[this.checkedIndex].awardCode;
+              // }
               handlePayment(androidPackageID, iosPackageID);
             } else {
               sessionStorage.setItem("preClick", "buyClick");
@@ -565,13 +565,22 @@
     $("body").removeClass("body");
   }
 
+  // 判断该套餐内的奖品是全都没数量了
+  function judgeGiftNumIsEmpty(list) {
+    var newList = list.filter(function(item) {
+      return item.num > 0;
+    })
+    console.log(newList)
+    return newList.length > 0
+  }
+
   // 购买回调
   function PayVipPackageCallback(e) {
     var data = JSON.parse(e);
     if (data.TradeStatus == "1") {
       _czc.push(["_trackEvent", "购买成功", "回调"]);
       if (!awardCode[app.packageType] && app.packageList[app.packageType] && app.packageList[app.packageType].awardList.length >
-        0) {
+        0 && judgeGiftNumIsEmpty(app.packageList[app.packageType].awardList)) {
         awardCode[app.packageType] = app.packageList[app.packageType].awardList[app.checkedIndex].awardCode;
       }
 

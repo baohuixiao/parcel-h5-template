@@ -81,7 +81,7 @@
     <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279780013&web_id=1279780013"></script>
   </div>
 
-  <div id="app" class="container" v-show="isPageShow" style="visibility: hidden;">
+  <div id="app" class="container" style="visibility: hidden;">
     <div class="header">
       <img
         src="https://picfile-baidu.babybus.com/ActivityData/BabyBusFile/20210319/5d65b758f0f842069e2196ad0e5bf9f8.png" />
@@ -243,7 +243,6 @@
     el: "#app",
 
     data: {
-      isPageShow: false,
       packageType: 0, // 两个套餐  1\2
       packageStack: [1],
       activityStatus: 0, // 0: 预热状态 1：开始状态  2：结束状态
@@ -471,7 +470,6 @@
           method: 'GET',
           dataType: 'json',
           complete: function (result) {
-            that.isPageShow = true;
             document.getElementById('app').style.visibility = 'visible';
           },
           success: function (res) {

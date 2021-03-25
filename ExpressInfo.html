@@ -224,7 +224,11 @@
               if (packageList.length > 0) {
                 that.packageList = that.handleIndexData(packageList);
                 that.giftList = that.findAwardList(that.packageList, packageID);
-                console.log(that.findAwardList(that.packageList, packageID))
+                if (that.giftList.length === 1) {
+                  that.hasGift = true;
+                  that.giftCover = that.giftList[0].icon;
+                  that.giftName = that.giftList[0].name;
+                }
               }
             }
           });

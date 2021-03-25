@@ -224,7 +224,7 @@
 
             // 处理提醒信息
             handleTipText: function(orderItem) {
-                if (orderItem.address && orderItem.address.length > 0) {
+                if ((orderItem.address && orderItem.address.length > 0) || orderItem.exchangeDay === '0') {
                     return false;
                 }
                 if (orderItem.payDate > joinEndTime || serverTime > Number(orderItem.exchangeDay)) {

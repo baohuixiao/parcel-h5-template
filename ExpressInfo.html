@@ -69,7 +69,7 @@
 <body>
   <!-- 埋点 -->
   <div style="position: absolute;width:0;height:0;overflow:hidden;">
-    <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
+    <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279780013&web_id=1279780013"></script>
   </div>
   <div @touchmove.prevent class="shadow" onClick="closeSuccessPop()">
     <div class="pop-wrap">
@@ -123,7 +123,8 @@
   <script>
     // 埋点
     var _czc = _czc || [];
-    _czc.push(["_setAccount", "1279349239"]);
+    _czc.push(["_setAccount", "1279780013"]);
+    _czc.push(["_trackEvent", "信息填写页", "访问"]);
 
     var OrderNo = getQueryString('OrderNo');
     var aid = getQueryString('aid');
@@ -341,7 +342,7 @@
 
     function postData(phoneNumber, userName, address) {
       try {
-        _czc.push(["_trackEvent", "提交收件信息", "点击"])
+        _czc.push(["_trackEvent", "信息填写页-提交收件信息按钮", "点击"])
       } catch (error) {
         console.log(error)
       }
@@ -363,17 +364,17 @@
         success: function (res) {
           console.log("发送成功")
           if (res.resultCode === "0") {
-            _czc.push(["_trackEvent", "收件信息提交", "成功"])
+            _czc.push(["_trackEvent", "信息填写页-收件信息提交", "成功"])
             localStorage.setItem('toFresh', 'true');
             document.getElementById('giftName').innerText = app.giftName ? app.giftName : app.giftList[app.giftSelectedIndex].name;
             showSuccessPop();
           } else {
-            _czc.push(["_trackEvent", "收件信息提交", "失败"])
+            _czc.push(["_trackEvent", "信息填写页-收件信息提交", "失败"])
             showToast(res.resultMessage);
           }
         },
         fail: function (err) {
-          _czc.push(["_trackEvent", "收件信息提交失败", ""])
+          _czc.push(["_trackEvent", "信息填写页-收件信息提交", "失败"])
           showToast('发送失败,请稍后重试');
           console.log("发送失败")
         }

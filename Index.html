@@ -78,7 +78,7 @@
 <body>
   <!-- 埋点数据 -->
   <div style="position: absolute;width:0;height:0;overflow:hidden;">
-    <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
+    <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279780013&web_id=1279780013"></script>
   </div>
 
   <div id="app" class="container" v-show="isPageShow" style="visibility: hidden;">
@@ -231,7 +231,8 @@
 <script>
   // 友盟埋点
   var _czc = _czc || [];
-  _czc.push(["_setAccount", "1279349239"]);
+  _czc.push(["_setAccount", "1279780013"]);
+  _czc.push(["_trackEvent", "首页", "访问"]);
 
   var aid = '';
   aid = getQueryString("aid");
@@ -337,12 +338,14 @@
           this.packageStack.push(packageType);
         }
         this.packageType = packageType;
+        _czc.push(["_trackEvent", "首页-套餐切换", "套餐" + this.packageType]);
       },
 
       chooseGift: function (index, number) {
         if (this.checkedIndex !== index && number > 0) {
           this.checkedIndex = index;
           awardCode[this.packageType] = this.packageList[this.packageType].awardList[this.checkedIndex].awardCode;
+          _czc.push(["_trackEvent", "首页-礼品切换", "点击"]);
         }
       },
 
@@ -357,7 +360,7 @@
             (resultCode === "" || resultCode === "0") &&
             this.activityStatus !== 0
           ) {
-            _czc.push(["_trackEvent", "订单记录", "点击"]);
+            _czc.push(["_trackEvent", "首页-订单记录按钮", "点击"]);
             if (accountID > 0) {
               jumpToOrderList();
             } else {
@@ -377,7 +380,7 @@
             (resultCode === "" || resultCode === "0") &&
             this.activityStatus === 1
           ) {
-            _czc.push(["_trackEvent", "立即开通", "点击"]);
+            _czc.push(["_trackEvent", "首页-套餐购买按钮点击", "套餐" + this.packageType]);
             if (accountID > 0) {
               if (this.packageList[this.packageType] && this.packageList[this.packageType].awardList.length > 0) {
                 awardCode[this.packageType] = this.packageList[this.packageType].awardList[this.checkedIndex].awardCode;

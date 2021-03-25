@@ -97,7 +97,7 @@
 <body>
     <!-- 埋点 -->
     <div style="position: absolute;width:0;height:0;overflow:hidden;">
-        <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279349239&web_id=1279349239"></script>
+        <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279780013&web_id=1279780013"></script>
     </div>
     <div id="container" class="container" v-show="showPage">
         <div class="content" v-if="orderList.length > 0">
@@ -145,7 +145,8 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
     var _czc = _czc || [];
-    _czc.push(["_setAccount", "1279349239"]);
+    _czc.push(["_setAccount", "1279780013"]);
+    _czc.push(["_trackEvent", "订单记录页", "访问"]);
 
     var app = new Vue({
         el: '.container',
@@ -260,7 +261,7 @@
 
             clickOrderItem: debounce(function (orderNo, awardID, packageID) {
                 if (orderNo) {
-                    _czc.push(["_trackEvent", "填写收件信息领公仔", "点击"]);
+                    _czc.push(["_trackEvent", "订单记录页-填写收件信息领公仔", "点击"]);
                     var awardCode = 0;
                     if (Number(awardID) !== 0) {
                         // 已选择礼物，需要返回awardCode

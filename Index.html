@@ -502,6 +502,10 @@
               }
               packageList[i].awardList[j] = tempObj;
             }
+            // 进行按数量排序
+            packageList[i].awardList.sort(function(a, b) {
+              return b.num - a.num;
+            })
           }
         }
         return packageList;

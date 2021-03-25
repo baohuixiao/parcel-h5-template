@@ -99,7 +99,7 @@
     <div style="position: absolute;width:0;height:0;overflow:hidden;">
         <script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1279780013&web_id=1279780013"></script>
     </div>
-    <div id="container" class="container" v-show="showPage">
+    <div id="container" class="container" style="visibility: hidden;">
         <div class="content" v-if="orderList.length > 0">
             <div class="order-item" v-for="(orderItem, index) in orderList" :key="orderItem.orderNo">
                 <div class="order-item-top">
@@ -152,7 +152,6 @@
         el: '.container',
 
         data: {
-            showPage: false,
             orderList: [],
             awardList: [],
             aid: '',
@@ -285,6 +284,7 @@
 
             getOrderList: function () {
                 var that = this;
+                try {
                 $.ajax({
                     url: '/AppActivity/MoreVIPPay_OrderData',
                     data: {
@@ -292,22 +292,24 @@
                     },
                     method: 'GET',
                     dataType: 'json',
+                        complete: function () {
+                            document.getElementById('container').style.visibility = 'visible';
+                        },
                     success: function (res) {
                         console.log(res);
                         if (res.resultCode === "0") {
                             that.orderList = res.data.orderList; //用户会员订单列表
                             that.awardList = res.data.awardList; //用户会员订单列表
-                            that.showPage = true;
-                        } else {
-                            that.showPage = true;
                         }
-                        console.log(that.orderList)
                     },
                     fail: function (err) {
                         console.log("发送失败");
-                        that.showPage = true;
                     }
                 })
+                } catch (error) {
+                    console.log(error);
+                    document.getElementById('container').style.visibility = 'visible';
+                }
             },
 
             //获取页面传参
@@ -346,7 +348,6 @@
         },
 
         mounted: function () {
-            this.showPage = true;
             this.aid = this.getQueryString('aid');
             this.getOrderList();
             this.addPageShowListener();
